@@ -1,9 +1,9 @@
 <?php 
 
-define("WEBSITE_TITLE", "PHP_FREECODE_01");
+define("APP_NAME", "PHP_01_UDEMY");
 
-define("DB_TYPE", "mysql");
-define("DB_NAME", "freecode_01_db");
+define("DB_DRIVER", "mysql");
+define("DB_NAME", "udemy_01_db");
 define("DB_USER", "root");
 define("DB_PASS", "");
 define("DB_HOST", "localhost");
