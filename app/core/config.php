@@ -1,6 +1,6 @@
 <?php 
 
-define("APP_NAME", "PHP_01_UDEMY");
+define("APP_NAME", "PHP_UDEMY");
 
 define("DB_DRIVER", "mysql");
 define("DB_NAME", "udemy_01_db");
