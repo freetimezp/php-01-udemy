@@ -10,7 +10,7 @@ define("DB_HOST", "localhost");
 
 define("PROTOCAL", "http");
 
-$path = str_replace("\\", "/", PROTOCAL . "://" . $_SERVER['SERVER_NAME'] . __DIR__ . "/");
+$path = str_replace("\\", "/", PROTOCAL . "://" . $_SERVER['SERVER_NAME'] . __DIR__);
 $path = str_replace($_SERVER['DOCUMENT_ROOT'], "", $path);
 
 define("ROOT", str_replace("app/core", "public", $path));

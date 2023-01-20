@@ -6,7 +6,7 @@ class Home extends Controller
     {
         $db = new Database();
         $res = $db->query("SELECT * FROM users");
-        show($res);
+        //show($res);
 
         $data['title'] = "Home";
         $this->view('home', $data);
