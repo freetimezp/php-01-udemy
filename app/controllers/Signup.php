@@ -14,18 +14,10 @@ class Signup extends Controller
         //show($user->errors);
 
         if($result) {
-            $query = "INSERT INTO users (email,firstname,lastname,password,role,date) 
-                values (:email,:firstname,:lastname,:password,:role,:date)";
-
-            $arr['email'] = $_POST['email'];
-            $arr['firstname'] = $_POST['firstname'];
-            $arr['lastname'] = $_POST['lastname'];
-            $arr['password'] = $_POST['password'];
-            $arr['role'] = "user";
-            $arr['date'] = date("Y-m-d H:i:s");
-
-            $db = new Database();
-            $db->query($query, $arr);
+            $_POST['date'] = date("Y-m-d H:i:s");
+            $_POST['role'] = "user";
+            
+            $user->insert($_POST);
         }
 
 
