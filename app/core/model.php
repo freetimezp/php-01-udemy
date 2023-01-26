@@ -3,9 +3,11 @@
 class Model extends Database
 {
     protected $table = "";
+    protected $allowedColumns = [];
 
     public function insert($data) {
         //remove unwanted columns
+
         if(!empty($this->allowedColumns)) {
             foreach($data as $key => $value) {
                 if(!in_array($key, $this->allowedColumns)) {
@@ -19,5 +21,23 @@ class Model extends Database
         $query .= " (" . implode(",", $keys) . ") VALUES (:" . implode(",:", $keys) . ");";
 
         $this->query($query, $data);
+    }
+
+    public function where($data) {
+        $keys = array_keys($data);
+        $query = "SELECT * FROM " . $this->table . " WHERE ";
+        
+        foreach($keys as $key) {
+            $query .= $key . "=:" . $key . " AND ";
+        };
+
+        $query = trim($query, "AND ");
+
+        $res = $this->query($query, $data);
+        if(is_array($res)) {
+            return $res;
+        }
+
+        return false;
     }
 }

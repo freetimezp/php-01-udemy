@@ -5,6 +5,7 @@ class Signup extends Controller
     public function index()
     {
         $data['title'] = "Signup";
+        $data['errors'] = [];
         $arr = [];
         //show($_POST);
 
@@ -19,7 +20,7 @@ class Signup extends Controller
             
             $user->insert($_POST);
         }
-
+        $data['errors'] = $user->errors;
 
         $this->view('signup', $data);
     }

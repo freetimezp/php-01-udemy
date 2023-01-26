@@ -80,6 +80,9 @@
                       <label for="yourEmail" class="form-label">Your Email</label>
                       <input type="email" value="<?=set_value('email');?>" name="email" class="form-control" id="yourEmail" required1>
                       <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                      <?php if(!empty($errors['email'])): ?>
+                        <small class="text-danger"><?=$errors['email'];?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="col-12">

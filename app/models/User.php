@@ -30,10 +30,9 @@ class User extends Model
         }
 
         //check email
-        $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
         if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "This email is not valid";
-        }else if($this->query($query, ['email' => $data['email']])) {
+        }else if($this->where(['email' => $data['email']])) {
             $this->errors['email'] = "This email already exist!";
         }
 
@@ -51,8 +50,6 @@ class User extends Model
 
 
         if(empty($this->errors)) {
-
-
             return true;
         }
 
