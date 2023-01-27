@@ -38,7 +38,6 @@
 </head>
 
 <body>
-
   <main>
     <div class="container">
 
@@ -66,42 +65,56 @@
                   <form method="post" class="row g-3 needs-validation" novalidate>
                     <div class="col-12">
                       <label for="yourName1" class="form-label">First Name</label>
-                      <input type="text" value="<?=set_value('firstname');?>" name="firstname" class="form-control" id="yourName1" required1>
+                      <input type="text" value="<?= set_value('firstname'); ?>" name="firstname" id="yourName1" required class="form-control <?= !empty($errors['firstname']) ? 'border-danger' : ''; ?>">
                       <div class="invalid-feedback">Please, enter your first name!</div>
+                      <?php if (!empty($errors['firstname'])) : ?>
+                        <small class="text-danger"><?= $errors['firstname']; ?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="col-12">
                       <label for="yourName2" class="form-label">Last Name</label>
-                      <input type="text" value="<?=set_value('lastname');?>" name="lastname" class="form-control" id="yourName2" required1>
+                      <input type="text" value="<?= set_value('lastname'); ?>" name="lastname" id="yourName2" required class="form-control <?= !empty($errors['lastname']) ? 'border-danger' : ''; ?>">
                       <div class="invalid-feedback">Please, enter your last name!</div>
+                      <?php if (!empty($errors['lastname'])) : ?>
+                        <small class="text-danger"><?= $errors['lastname']; ?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>
-                      <input type="email" value="<?=set_value('email');?>" name="email" class="form-control" id="yourEmail" required1>
+                      <input type="email" value="<?= set_value('email'); ?>" name="email" id="yourEmail" required class="form-control <?= !empty($errors['lastname']) ? 'border-danger' : ''; ?>">
                       <div class="invalid-feedback">Please enter a valid Email adddress!</div>
-                      <?php if(!empty($errors['email'])): ?>
-                        <small class="text-danger"><?=$errors['email'];?></small>
+                      <?php if (!empty($errors['email'])) : ?>
+                        <small class="text-danger"><?= $errors['email']; ?></small>
                       <?php endif; ?>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" value="<?=set_value('password');?>" name="password" class="form-control" id="yourPassword" required1>
+                      <input type="password" value="<?= set_value('password'); ?>" name="password" id="yourPassword" class="form-control <?= !empty($errors['password']) ? 'border-danger' : ''; ?>" required>
                       <div class="invalid-feedback">Please enter your password!</div>
+                      <?php if (!empty($errors['password'])) : ?>
+                        <small class="text-danger"><?= $errors['password']; ?></small>
+                      <?php endif; ?>
                     </div>
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Retype Password</label>
-                      <input type="password" value="<?=set_value('retype_password');?>" name="retype_password" class="form-control" id="yourRetypePassword" required1>
+                      <input type="password" value="<?= set_value('retype_password'); ?>" name="retype_password" class="form-control <?= !empty($errors['retype_password']) ? 'border-danger' : ''; ?>" id="yourRetypePassword" required>
                       <div class="invalid-feedback">Please retype your password!</div>
+                      <?php if (!empty($errors['retype_password'])) : ?>
+                        <small class="text-danger"><?= $errors['retype_password']; ?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="col-12">
                       <div class="form-check">
-                        <input <?=set_value('terms') ? 'checked' : '';?> class="form-check-input" name="terms" type="checkbox" 
-                          value="1" id="acceptTerms" required1>
+                        <input <?= set_value('terms') ? 'checked' : ''; ?> class="form-check-input" name="terms" type="checkbox" value="1" id="acceptTerms" required>
                         <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
                         <div class="invalid-feedback">You must agree before submitting.</div>
+                        <?php if (!empty($errors['terms'])) : ?>
+                          <small class="text-danger"><?= $errors['terms']; ?></small>
+                        <?php endif; ?>
                       </div>
                     </div>
                     <div class="col-12">

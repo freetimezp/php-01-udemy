@@ -46,6 +46,12 @@
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            
+              <?php if(message()): ?>
+                <div class="alert alert-success text-center">
+                  <?=message('', true); ?>
+                </div>
+              <?php endif; ?>
 
               <div class="d-flex justify-content-center py-4">
                 <a href="<?=ROOT;?>" class="logo d-flex align-items-center w-auto">
