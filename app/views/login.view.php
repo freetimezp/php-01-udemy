@@ -69,21 +69,28 @@
                     <p class="text-center small">Enter your username & password to login</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form method="POST" class="row g-3 needs-validation" novalidate>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
+                      <label for="yourUsername" class="form-label">Email</label>
                       <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please enter your username.</div>
+                        <input type="text" name="email" class="form-control" id="yourUsername" 
+                          value="<?= set_value('email'); ?>" required>
+                        <div class="invalid-feedback">Please enter your email.</div>
                       </div>
+                      <?php if (!empty($errors['email'])) : ?>
+                        <small class="text-danger"><?= $errors['email']; ?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <input type="password" name="password" class="form-control" id="yourPassword"
+                        value="<?= set_value('password'); ?>" required>
                       <div class="invalid-feedback">Please enter your password!</div>
+                      <?php if (!empty($errors['password'])) : ?>
+                        <small class="text-danger"><?= $errors['password']; ?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="col-12">
