@@ -19,7 +19,7 @@ class Login extends Controller
             if($row) {
                 if($row->password === $_POST['password']) {
                     //auth
-                    $_SESSION['USER_DATA'] = $row;
+                    Auth::authenticate($row);
 
                     redirect('home');
                 }
