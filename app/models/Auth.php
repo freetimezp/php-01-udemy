@@ -31,4 +31,15 @@ class Auth
 
         return false;
     }
+
+    //when we call in Auth class function that dont be here, this magic func will call
+    public static function __callStatic($funcname, $args) {
+        $key = str_replace("get", "", strtolower($funcname));
+        
+        if(!empty($_SESSION['USER_DATA']->$key)) {
+            return $_SESSION['USER_DATA']->$key;
+        }
+
+        return "Guest";
+    }
 }
