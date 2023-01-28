@@ -4,6 +4,7 @@ Class App {
     //create default controller and method
     private $controller = "_404";
     private $method = "index";
+    public static $page = "_404";
 
     //constuct will run when this class created
     public function __construct() {
@@ -16,6 +17,7 @@ Class App {
             //use new controller
             require "../app/controllers/" . ucfirst($arr[0]) . ".php";
             $this->controller = $arr[0];
+            self::$page = $arr[0];
             unset($arr[0]);
         }else{
             require "../app/controllers/" . $this->controller . ".php";
