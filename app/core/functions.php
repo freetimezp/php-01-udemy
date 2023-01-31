@@ -35,3 +35,7 @@ function message($msg = '', $erase = false) {
 
     return false;
 }
+
+function esc($str) {
+    return nl2br(htmlspecialchars($str));
+}
