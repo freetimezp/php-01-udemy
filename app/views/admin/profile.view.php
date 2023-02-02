@@ -1,7 +1,7 @@
 <?php $this->view("admin/admin-header", $data); ?>
 
 <?php if(!empty($row)): ?>
-
+  
   <div class="pagetitle">
       <h1>Profile</h1>
       <nav>
@@ -46,19 +46,31 @@
               <ul class="nav nav-tabs nav-tabs-bordered">
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview"
+                  onclick="set_tab(this.getAttribute('data-bs-target'))" id="profile-overview-tab">
+                    Overview
+                  </button>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit"
+                  onclick="set_tab(this.getAttribute('data-bs-target'))" id="profile-edit-tab">
+                    Edit Profile
+                  </button>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings"
+                  onclick="set_tab(this.getAttribute('data-bs-target'))" id="profile-settings-tab">
+                    Settings
+                  </button>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password"
+                  onclick="set_tab(this.getAttribute('data-bs-target'))" id="profile-change-password-tab">
+                    Change Password
+                  </button>
                 </li>
 
               </ul>
@@ -73,7 +85,7 @@
                   <h5 class="card-title">Profile Details</h5>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                    <div class="col-lg-3 col-md-4 label">Full Name</div>
                     <div class="col-lg-9 col-md-8">
                       <?=ucfirst(esc($row->firstname));?> <?=ucfirst(esc($row->lastname));?>
                     </div>
@@ -365,12 +377,33 @@
 <?php endif; ?>
 
 <script>
+  var tab = sessionStorage.getItem("tab") ? sessionStorage.getItem("tab") : "#profile-overview";
+
+  function show_tab(tab_name) {
+    const someTabTriggerEl = document.querySelector(tab_name + "-tab");
+    const tab = new bootstrap.Tab(someTabTriggerEl);
+    //console.log(tab);
+
+    tab.show();
+  }
+
+  function set_tab(tab_name) {
+    tab = tab_name;
+    //console.log(tab);
+    sessionStorage.setItem("tab", tab_name);
+  }
+
   function load_image(file) {
     document.querySelector(".js-filename").innerHTML = "Selected File: " + file.name;
 
     let mylink = window.URL.createObjectURL(file);
 
     document.querySelector(".js-image-preview").src = mylink;
+  }
+
+  window.onload = function() {
+    show_tab(tab);
+    console.log(tab);
   }
 </script>
 

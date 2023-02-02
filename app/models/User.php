@@ -79,12 +79,11 @@ class User extends Model
         if(empty($data['lastname'])) {
             $this->errors['lastname'] = "A last name is required.";
         }
-
+        
+        //check email
         if(empty($data['email'])) {
             $this->errors['email'] = "Email is required.";
         }
-
-        //check email
         if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "This email is not valid";
         }else if($this->where(['email' => $data['email']])) {
