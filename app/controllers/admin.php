@@ -20,8 +20,6 @@ class Admin extends Controller
             redirect('login'); 
         }
 
-        $data['title'] = "Profile";
-
         $id = $id ?? Auth::getId();
         $user = new User();
         $data['row'] = $row = $user->first(['id' => $id]);
@@ -34,27 +32,38 @@ class Admin extends Controller
                 file_put_contents("uploads/index.php", "<?php //no access");
             }
 
-            $allowed = ['image/jpeg', 'image/png'];
+            if($user->edit_validate($data)) {
+                $allowed = ['image/jpeg', 'image/png'];
 
-            if(!empty($_FILES['image']['name'])) {
-                if($_FILES['image']['error'] == 0) {
-                    if(in_array($_FILES['image']['type'], $allowed)) {
-                        //if is all good
-                        $destination = $folder . time() . $_FILES['image']['name'];
-                        move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+                if(!empty($_FILES['image']['name'])) {
+                    if($_FILES['image']['error'] == 0) {
+                        if(in_array($_FILES['image']['type'], $allowed)) {
+                            //if is all good
+                            $destination = $folder . time() . $_FILES['image']['name'];
+                            move_uploaded_file($_FILES['image']['tmp_name'], $destination);
 
-                        $_POST['image'] = $destination;
+                            $_POST['image'] = $destination;
+
+                            if(file_exists($row->image)) {
+                                unlink($row->image);
+                            }
+                        }else{
+                            $user->errors['image'] = "An error occured with type image";
+                        }
                     }else{
-                        $user->errors['image'] = "An error occured with type image";
+                        $user->errors['image'] = "An error occured with upload image";
                     }
-                }else{
-                    $user->errors['image'] = "An error occured with upload image";
                 }
+
+                $user->update($id, $_POST);
+
+                redirect('admin/profile/' . $id);
             }
 
-            $user->update($id, $_POST);
-            redirect('admin/profile/' . $id);
         }
+
+        $data['title'] = "Profile";
+        $data['errors'] = $user->errors;
 
         $this->view('admin/profile', $data);
     }
