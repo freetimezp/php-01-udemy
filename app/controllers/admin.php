@@ -32,7 +32,7 @@ class Admin extends Controller
                 file_put_contents("uploads/index.php", "<?php //no access");
             }
 
-            if($user->edit_validate($data)) {
+            if($user->edit_validate($_POST)) {
                 $allowed = ['image/jpeg', 'image/png'];
 
                 if(!empty($_FILES['image']['name'])) {

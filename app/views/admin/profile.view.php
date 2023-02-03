@@ -122,7 +122,7 @@
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Phone</div>
                     <div class="col-lg-9 col-md-8">
-                      <?=esc($row->address);?>
+                      <?=esc($row->phone);?>
                     </div>
                   </div>
 
@@ -166,6 +166,10 @@
                         <input name="firstname" type="text" class="form-control" id="firstname" 
                           value="<?=set_value('firstname', $row->firstname);?>">
                       </div>
+
+                      <?php if (!empty($errors['firstname'])) : ?>
+                        <small class="text-danger"><?= $errors['firstname']; ?></small>
+                      <?php endif; ?>
                     </div>
                     <div class="row mb-3">
                       <label for="lastname" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
@@ -173,6 +177,10 @@
                         <input name="lastname" type="text" class="form-control" id="lastname" 
                           value="<?=set_value('lastname', $row->lastname);?>">
                       </div>
+
+                      <?php if (!empty($errors['lastname'])) : ?>
+                        <small class="text-danger"><?= $errors['lastname']; ?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="row mb-3">
@@ -222,6 +230,10 @@
                         <input name="phone" type="text" class="form-control" id="Phone" 
                           value="<?=set_value('phone', $row->phone);?>">
                       </div>
+                      
+                      <?php if (!empty($errors['phone'])) : ?>
+                        <small class="text-danger"><?=$errors['phone'];?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="row mb-3">
@@ -230,12 +242,17 @@
                         <input name="email" type="email" class="form-control" id="Email" 
                           value="<?=set_value('email', $row->email);?>">
                       </div>
+
+                      <?php if (!empty($errors['email'])) : ?>
+                        <small class="text-danger"><?= $errors['email']; ?></small>
+                      <?php endif; ?>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="twitter_link" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
+                        <input name="twitter_link" type="text" class="form-control" id="Twitter" 
+                        value="<?=set_value('twitter_link', $row->twitter_link);?>">
                       </div>
 
                       <?php if (!empty($errors['twitter_link'])) : ?>
@@ -246,7 +263,8 @@
                     <div class="row mb-3">
                       <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="facebook_link" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
+                        <input name="facebook_link" type="text" class="form-control" id="Facebook" 
+                        value="<?=set_value('facebook_link', $row->facebook_link);?>">
                       </div>
                       
                       <?php if (!empty($errors['facebook_link'])) : ?>
@@ -257,7 +275,8 @@
                     <div class="row mb-3">
                       <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="instagram_link" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
+                        <input name="instagram_link" type="text" class="form-control" id="Instagram" 
+                        value="<?=set_value('instagram_link', $row->instagram_link);?>">
                       </div>
                       
                       <?php if (!empty($errors['instagram_link'])) : ?>
@@ -268,7 +287,8 @@
                     <div class="row mb-3">
                       <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="linkedin_link" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
+                        <input name="linkedin_link" type="text" class="form-control" id="Linkedin" 
+                        value="<?=set_value('linkedin_link', $row->linkedin_link);?>">
                       </div>
                       
                       <?php if (!empty($errors['linkedin_link'])) : ?>
@@ -403,7 +423,7 @@
 
   window.onload = function() {
     show_tab(tab);
-    console.log(tab);
+    //console.log(tab);
   }
 </script>
 
