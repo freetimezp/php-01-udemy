@@ -34,6 +34,12 @@
                 <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
               </div>
             </div>
+
+            <?php if(message()): ?>
+                <div class="alert alert-success text-center">
+                  <?=message('', true); ?>
+                </div>
+              <?php endif; ?>
           </div>
 
         </div>

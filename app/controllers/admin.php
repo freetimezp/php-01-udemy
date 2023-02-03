@@ -32,7 +32,7 @@ class Admin extends Controller
                 file_put_contents("uploads/index.php", "<?php //no access");
             }
 
-            if($user->edit_validate($_POST)) {
+            if($user->edit_validate($_POST, $id)) {
                 $allowed = ['image/jpeg', 'image/png'];
 
                 if(!empty($_FILES['image']['name'])) {
@@ -41,6 +41,8 @@ class Admin extends Controller
                             //if is all good
                             $destination = $folder . time() . $_FILES['image']['name'];
                             move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+                            //resize image for smaller size
+                            resize_image($destination);
 
                             $_POST['image'] = $destination;
 
@@ -56,7 +58,7 @@ class Admin extends Controller
                 }
 
                 $user->update($id, $_POST);
-
+                message("Profile saved successfully!");
                 redirect('admin/profile/' . $id);
             }
 
