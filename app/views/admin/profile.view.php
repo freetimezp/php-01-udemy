@@ -444,14 +444,24 @@
   //upload functions
   function save_profile() {
     var image = document.querySelector(".js-profile-image-input");
+    var allowed = ['jpg', 'jpeg', 'png', 'gif'];
+
+    if(typeof image.files[0] == 'object') {
+      var ext = image.files[0].name.split(".").pop();
+    }
+
+    if(!allowed.includes(ext.toLowerCase())) {
+      alert("File type not allowed, try: " + allowed.toString(","));
+      return;
+    }
 
     send_data({
       pic: image.files[0],
     });
   }
 
-  function send_data(obj) {
-    var prog = document.querySelector(".js-prog");
+  function send_data(obj, progbar = 'js-prog') {
+    var prog = document.querySelector("." + progbar);
     prog.children[0].style.width = "0%";
 
     prog.classList.remove("hide");
@@ -467,7 +477,8 @@
       if(ajax.readyState == 4) {
         if(ajax.status == 200) {
           //everything well
-          alert("upload complete")
+          alert("upload complete");
+          window.location.reload();
         }else{
           //server return error
           alert("error");
