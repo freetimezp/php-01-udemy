@@ -2,7 +2,7 @@
 
 <?php if(!empty($row)): ?>
   
-  <div class="pagetitle">
+    <div class="pagetitle">
       <h1>Profile</h1>
       <nav>
         <ol class="breadcrumb">
@@ -159,7 +159,8 @@
                         <div class="pt-2">
                           <label class="btn btn-primary btn-sm" title="Upload new profile image">
                             <i class="bi bi-upload text-white"></i>
-                            <input onchange="load_image(this.files[0])" type="file" name="image" style="display: none;">
+                            <input onchange="load_image(this.files[0])" type="file" class="js-profile-image-input"
+                              name="image" style="display: none;">
                           </label>
                           <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
                         </div>
@@ -302,11 +303,18 @@
                       <?php endif; ?>
                     </div>
 
+                    <div class="js-prog progress my-4 hide">
+                      <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" 
+                        aria-valuemin="0" aria-valuemax="100">
+                        Saving.. 50%
+                      </div>
+                    </div>
+
                     <div class="text-center">
                       <a href="<?=ROOT;?>/admin">
                         <button type="button" class="btn btn-secondary">Back</button>
                       </a>
-                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                      <button type="button" onclick="save_profile()" class="btn btn-primary">Save Changes</button>
                     </div>
                   </form><!-- End Profile Edit Form -->
 
@@ -430,6 +438,50 @@
   window.onload = function() {
     show_tab(tab);
     //console.log(tab);
+  }
+
+
+  //upload functions
+  function save_profile() {
+    var image = document.querySelector(".js-profile-image-input");
+
+    send_data({
+      pic: image.files[0],
+    });
+  }
+
+  function send_data(obj) {
+    var prog = document.querySelector(".js-prog");
+    prog.children[0].style.width = "0%";
+
+    prog.classList.remove("hide");
+
+    var myform = new FormData();
+
+    for(key in obj) {
+      myform.append(key, obj[key]);
+    }
+
+    var ajax = new XMLHttpRequest();
+    ajax.addEventListener("readystatechange", function() {
+      if(ajax.readyState == 4) {
+        if(ajax.status == 200) {
+          //everything well
+          alert("upload complete")
+        }else{
+          //server return error
+          alert("error");
+        }
+      }
+    });
+    ajax.upload.addEventListener('progress', function(e) {
+      var persent = Math.round((e.loaded / e.total) * 100);
+      prog.children[0].style.width = persent + "%";
+      prog.children[0].innerHTML = "Saving.." + persent + "%";
+    });
+
+    ajax.open('post', '', true);
+    ajax.send(myform);
   }
 </script>
 
