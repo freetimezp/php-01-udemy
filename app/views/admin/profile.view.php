@@ -170,7 +170,7 @@
                     <div class="row mb-3">
                       <label for="firstname" class="col-md-4 col-lg-3 col-form-label">First Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="firstname" type="text" class="form-control" id="firstname" 
+                        <input name="firstname" type="text" class="form-control" id="firstname" required
                           value="<?=set_value('firstname', $row->firstname);?>">
                       </div>
 
@@ -181,7 +181,7 @@
                     <div class="row mb-3">
                       <label for="lastname" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="lastname" type="text" class="form-control" id="lastname" 
+                        <input name="lastname" type="text" class="form-control" id="lastname" required
                           value="<?=set_value('lastname', $row->lastname);?>">
                       </div>
 
@@ -246,7 +246,7 @@
                     <div class="row mb-3">
                       <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="email" type="email" class="form-control" id="Email" 
+                        <input name="email" type="email" class="form-control" id="Email" required
                           value="<?=set_value('email', $row->email);?>">
                       </div>
 
@@ -314,7 +314,7 @@
                       <a href="<?=ROOT;?>/admin">
                         <button type="button" class="btn btn-secondary">Back</button>
                       </a>
-                      <button type="button" onclick="save_profile()" class="btn btn-primary">Save Changes</button>
+                      <button type="button" onclick="save_profile(event)" class="btn btn-primary">Save Changes</button>
                     </div>
                   </form><!-- End Profile Edit Form -->
 
@@ -442,22 +442,41 @@
 
 
   //upload functions
-  function save_profile() {
-    var image = document.querySelector(".js-profile-image-input");
-    var allowed = ['jpg', 'jpeg', 'png', 'gif'];
+  function save_profile(e) {
+    //get form by click button
+    var form = e.currentTarget.form;
+    var inputs = form.querySelectorAll("input, textarea");
+    var obj = {};
+    var image_added = false;
 
-    if(typeof image.files[0] == 'object') {
-      var ext = image.files[0].name.split(".").pop();
+    for(var i = 0; i < inputs.length; i++) {
+      var key = inputs[i].name;
+
+      if(key == 'image') {
+        if(typeof inputs[i].files[0] == 'object') {
+          obj[key] = inputs[i].files[0];
+          image_added = true;
+        }
+      }else{
+        obj[key] = inputs[i].value;
+      }
     }
 
-    if(!allowed.includes(ext.toLowerCase())) {
-      alert("File type not allowed, try: " + allowed.toString(","));
-      return;
+    //validate image
+    if(image_added) {
+      var allowed = ['jpg', 'jpeg', 'png', 'gif'];
+
+      if(typeof obj.image == 'object') {
+        var ext = obj.image.name.split(".").pop();
+      }
+
+      if(!allowed.includes(ext.toLowerCase())) {
+        alert("File type not allowed, try: " + allowed.toString(","));
+        return;
+      }
     }
 
-    send_data({
-      pic: image.files[0],
-    });
+    send_data(obj);
   }
 
   function send_data(obj, progbar = 'js-prog') {
