@@ -162,6 +162,12 @@
                             <input onchange="load_image(this.files[0])" type="file" class="js-profile-image-input"
                               name="image" style="display: none;">
                           </label>
+
+                          <?php if (!empty($errors['image'])) : ?>
+                            <small class="js-error-image text-danger"><?= $errors['image']; ?></small>
+                          <?php endif; ?>
+                          <small class="js-error-image text-danger"></small>
+
                           <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
                         </div>
                       </div>
@@ -175,8 +181,9 @@
                       </div>
 
                       <?php if (!empty($errors['firstname'])) : ?>
-                        <small class="text-danger"><?= $errors['firstname']; ?></small>
+                        <small class="js-error-firstname text-danger"><?= $errors['firstname']; ?></small>
                       <?php endif; ?>
+                      <small class="js-error-firstname text-danger"></small>
                     </div>
                     <div class="row mb-3">
                       <label for="lastname" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
@@ -186,8 +193,9 @@
                       </div>
 
                       <?php if (!empty($errors['lastname'])) : ?>
-                        <small class="text-danger"><?= $errors['lastname']; ?></small>
+                        <small class="js-error-lastname text-danger"><?= $errors['lastname']; ?></small>
                       <?php endif; ?>
+                      <small class="js-error-lastname text-danger"></small>
                     </div>
 
                     <div class="row mb-3">
@@ -239,8 +247,9 @@
                       </div>
                       
                       <?php if (!empty($errors['phone'])) : ?>
-                        <small class="text-danger"><?=$errors['phone'];?></small>
+                        <small class="js-error-phone text-danger"><?=$errors['phone'];?></small>
                       <?php endif; ?>
+                      <small class="js-error-phone text-danger"></small>
                     </div>
 
                     <div class="row mb-3">
@@ -251,8 +260,9 @@
                       </div>
 
                       <?php if (!empty($errors['email'])) : ?>
-                        <small class="text-danger"><?= $errors['email']; ?></small>
+                        <small class="js-error-email text-danger"><?= $errors['email']; ?></small>
                       <?php endif; ?>
+                      <small class="js-error-email text-danger"></small>
                     </div>
 
                     <div class="row mb-3">
@@ -263,8 +273,9 @@
                       </div>
 
                       <?php if (!empty($errors['twitter_link'])) : ?>
-                        <small class="text-danger"><?= $errors['twitter_link']; ?></small>
+                        <small class="js-error-twitter_link text-danger"><?= $errors['twitter_link']; ?></small>
                       <?php endif; ?>
+                      <small class="js-error-twitter_link text-danger"></small>
                     </div>
 
                     <div class="row mb-3">
@@ -275,8 +286,9 @@
                       </div>
                       
                       <?php if (!empty($errors['facebook_link'])) : ?>
-                        <small class="text-danger"><?= $errors['facebook_link']; ?></small>
+                        <small class="js-error-facebook_link text-danger"><?= $errors['facebook_link']; ?></small>
                       <?php endif; ?>
+                      <small class="js-error-facebook_link text-danger"></small>
                     </div>
 
                     <div class="row mb-3">
@@ -287,8 +299,9 @@
                       </div>
                       
                       <?php if (!empty($errors['instagram_link'])) : ?>
-                        <small class="text-danger"><?= $errors['instagram_link']; ?></small>
+                        <small class="js-error-instagram_link text-danger"><?= $errors['instagram_link']; ?></small>
                       <?php endif; ?>
+                      <small class="js-error-instagram_link text-danger"></small>
                     </div>
 
                     <div class="row mb-3">
@@ -299,8 +312,9 @@
                       </div>
                       
                       <?php if (!empty($errors['linkedin_link'])) : ?>
-                        <small class="text-danger"><?= $errors['linkedin_link']; ?></small>
+                        <small class="js-error-linkedin_link text-danger"><?= $errors['linkedin_link']; ?></small>
                       <?php endif; ?>
+                      <small class="js-error-linkedin_link text-danger"></small>
                     </div>
 
                     <div class="js-prog progress my-4 hide">
@@ -496,8 +510,7 @@
       if(ajax.readyState == 4) {
         if(ajax.status == 200) {
           //everything well
-          alert("upload complete");
-          window.location.reload();
+          handle_result(ajax.responseText);
         }else{
           //server return error
           alert("error");
@@ -512,6 +525,32 @@
 
     ajax.open('post', '', true);
     ajax.send(myform);
+  }
+
+  function handle_result(result) {
+    var obj = JSON.parse(result);
+
+    if(typeof obj == 'object') {
+      //create object
+
+      if(typeof obj.errors == 'object') {
+        //have errors
+        display_errors(obj.errors);
+        alert("Please fix errors");
+      }else{
+        //save complete
+        alert("Profile saved successfully!");
+        window.location.reload();
+      }
+    }
+  }
+
+  function display_errors(errors) {
+    for(key in errors) {
+      if(document.querySelector(".js-error-" + key)) {
+        var error = document.querySelector(".js-error-" + key).innerHTML = errors[key];
+      }
+    }
   }
 </script>
 
