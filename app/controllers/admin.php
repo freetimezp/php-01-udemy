@@ -91,6 +91,11 @@ class Admin extends Controller
         $data['id'] = $id;
         //$data['errors'] = $user->errors;
 
+        if($action == 'add') {
+            $category = new Category();
+            $data['categories'] = $category->findAll("ASC");
+        }
+
         $this->view('admin/courses', $data);
     }
 }

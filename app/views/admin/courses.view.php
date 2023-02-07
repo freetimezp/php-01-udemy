@@ -13,21 +13,12 @@
 
                 <div class="col-md-12">
                     <select id="inputState" class="form-select">
-                        <option selected>Course Category...</option>
-                        <option>Development</option>
-                        <option>Business</option>
-                        <option>Finance & Accounting</option>
-                        <option>IT & Software</option>
-                        <option>Office Productivity</option>
-                        <option>Personal Development</option>
-                        <option>Design</option>
-                        <option>Marketing</option>
-                        <option>Lifestyle</option>
-                        <option>Photography & Video</option>
-                        <option>Health & Fitness</option>
-                        <option>Music</option>
-                        <option>Teaching & Academics</option>
-                        <option>I dont know yet..</option>
+                        <option value="" selected>Course Category...</option>
+                        <?php if(!empty($categories)): ?>
+                            <?php foreach($categories as $cat): ?>
+                                <option value="<?=$cat->id;?>"><?=esc($cat->category);?></option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </select>
                 </div>
 

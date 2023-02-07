@@ -70,6 +70,18 @@ class Model extends Database
         return false;
     }
 
+    public function findAll($order = 'DESC') {
+        $query = "SELECT * FROM " . $this->table . " ORDER BY id $order";
+        
+        $res = $this->query($query);
+
+        if(is_array($res)) {
+            return $res;
+        }
+
+        return false;
+    }
+
     public function first($data) {
         $keys = array_keys($data);
         $query = "SELECT * FROM " . $this->table . " WHERE ";
