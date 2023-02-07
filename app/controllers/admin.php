@@ -79,7 +79,7 @@ class Admin extends Controller
         $this->view('admin/profile', $data);
     }
 
-    public function courses($id = null)
+    public function courses($action = null, $id = null)
     {
         if(!Auth::logged_in()) {
             message('Please login to view the profile section');
@@ -87,6 +87,8 @@ class Admin extends Controller
         }
 
         $data['title'] = "Courses";
+        $data['action'] = $action;
+        $data['id'] = $id;
         //$data['errors'] = $user->errors;
 
         $this->view('admin/courses', $data);
