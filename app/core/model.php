@@ -82,7 +82,7 @@ class Model extends Database
         return false;
     }
 
-    public function first($data) {
+    public function first($data, $order = "DESC") {
         $keys = array_keys($data);
         $query = "SELECT * FROM " . $this->table . " WHERE ";
         
@@ -91,7 +91,7 @@ class Model extends Database
         };
 
         $query = trim($query, "AND ");
-        $query .= " ORDER BY id DESC LIMIT 1";
+        $query .= " ORDER BY id $order LIMIT 1";
 
         $res = $this->query($query, $data);
         if(is_array($res)) {

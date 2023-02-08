@@ -1,25 +1,39 @@
 <?php $this->view("admin/admin-header", $data); ?>
 
+<?php if (message()) : ?>
+    <div class="alert alert-success text-center">
+        <?= message('', true); ?>
+    </div>
+<?php endif; ?>
+
 <?php if ($action == 'add') : ?>
     <div class="card col-md-5 mx-auto">
         <div class="card-body">
             <h5 class="card-title">New Course</h5>
 
             <!-- No Labels Form -->
-            <form class="row g-3">
+            <form method="POST" class="row g-3">
                 <div class="col-md-12">
-                    <input type="text" class="form-control" placeholder="Course title">
+                    <input name="title" type="text" placeholder="Course title" value="<?= set_value('title') ?>" class="form-control <?= !empty($errors['title']) ? 'border-danger' : ''; ?>">
+
+                    <?php if (!empty($errors['title'])) : ?>
+                        <small class="text-danger"><?= $errors['title']; ?></small>
+                    <?php endif; ?>
                 </div>
 
                 <div class="col-md-12">
-                    <select id="inputState" class="form-select">
+                    <select name="category_id" id="inputState" class="form-select <?= !empty($errors['category_id']) ? 'border-danger' : ''; ?>">
                         <option value="" selected>Course Category...</option>
-                        <?php if(!empty($categories)): ?>
-                            <?php foreach($categories as $cat): ?>
-                                <option value="<?=$cat->id;?>"><?=esc($cat->category);?></option>
+                        <?php if (!empty($categories)) : ?>
+                            <?php foreach ($categories as $cat) : ?>
+                                <option value="<?= $cat->id; ?>"><?= esc($cat->category); ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
+
+                    <?php if (!empty($errors['category_id'])) : ?>
+                        <small class="text-danger"><?= $errors['category_id']; ?></small>
+                    <?php endif; ?>
                 </div>
 
                 <div class="text-center">
