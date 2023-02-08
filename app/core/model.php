@@ -4,6 +4,7 @@ class Model extends Database
 {
     protected $table = "";
     protected $allowedColumns = [];
+    protected $afterSelect = [];
 
     public function insert($data) {
         //remove unwanted columns
@@ -65,6 +66,13 @@ class Model extends Database
 
         $res = $this->query($query, $data);
         if(is_array($res)) {
+            //run afterSelect func
+            if(property_exists($this, 'afterSelect')) {
+                foreach($this->afterSelect as $func) {
+                    $res = $this->$func($res);
+                }
+            }
+
             return $res;
         }
 
@@ -77,6 +85,12 @@ class Model extends Database
         $res = $this->query($query);
 
         if(is_array($res)) {
+            if(property_exists($this, 'afterSelect')) {
+                foreach($this->afterSelect as $func) {
+                    $res = $this->$func($res);
+                }
+            }
+
             return $res;
         }
 
@@ -96,6 +110,13 @@ class Model extends Database
 
         $res = $this->query($query, $data);
         if(is_array($res)) {
+            //run afterSelect func
+            if(property_exists($this, 'afterSelect')) {
+                foreach($this->afterSelect as $func) {
+                    $res = $this->$func($res);
+                }
+            }
+
             return $res[0];
         }
 

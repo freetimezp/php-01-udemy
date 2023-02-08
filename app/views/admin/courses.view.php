@@ -67,6 +67,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Title</th>
+                        <th scope="col">Instructor</th>
                         <th scope="col">Category</th>
                         <th scope="col">Price</th>
                         <th scope="col">Primary Subject</th>
@@ -79,9 +80,10 @@
                     <?php if (!empty($rows)) : ?>
                         <?php foreach ($rows as $row) : ?>
                             <tr>
-                                <th scope="row">1</th>
+                                <th scope="row"><?=$row->id;?></th>
                                 <td><?=esc($row->title);?></td>
-                                <td><?=esc($row->category_id);?></td>
+                                <td><?=esc($row->user_row->name ?? 'Unknown');?></td>
+                                <td><?=esc($row->category_row->category ?? 'Unknown');?></td>
                                 <td><?=esc($row->price_id);?></td>
                                 <td><?=esc($row->primary_subject);?></td>
                                 <td><?=esc(get_date($row->date));?></td>

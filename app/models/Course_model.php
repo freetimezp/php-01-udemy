@@ -25,6 +25,16 @@ class Course_model extends Model
         'published', 																			
     ];
 
+    protected $afterSelect = [
+        'get_category',
+        'get_sub_category',
+        'get_user',
+        'get_price',
+        'get_level',
+        'get_language',
+    ];
+    protected $beforeUpdate = [];
+
     public function validate($data)
     {
         $this->errors = [];
@@ -106,5 +116,60 @@ class Course_model extends Model
         }
 
         return false;
+    }
+
+    protected function get_category($rows) {
+        
+        return $rows;
+    }
+
+    protected function get_sub_category($rows) {
+        $db = new Database();
+        
+        if(!empty($rows[0]->category_id)) {
+            foreach($rows as $key => $row) {
+                $query = "SELECT * FROM categories WHERE id = :id LIMIT 1";
+                
+                $cat = $db->query($query, ['id' => $row->category_id]);
+                if(!empty($cat)) {
+                    $rows[$key]->category_row = $cat[0];
+                }
+            }
+        }
+
+        return $rows;
+    }
+
+    protected function get_user($rows) {
+        $db = new Database();
+        
+        if(!empty($rows[0]->user_id)) {
+            foreach($rows as $key => $row) {
+                $query = "SELECT firstname, lastname, role FROM users WHERE id = :id LIMIT 1";
+                
+                $user = $db->query($query, ['id' => $row->user_id]);
+                if(!empty($user)) {
+                    $user[0]->name = $user[0]->firstname . ' ' . $user[0]->lastname;
+                    $rows[$key]->user_row = $user[0];
+                }
+            }
+        }
+
+        return $rows;
+    }
+
+    protected function get_price($rows) {
+                
+        return $rows;
+    }
+
+    protected function get_level($rows) {
+                
+        return $rows;
+    }
+
+    protected function get_language($rows) {
+        
+        return $rows;
     }
 }
