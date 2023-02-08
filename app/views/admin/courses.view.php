@@ -26,7 +26,7 @@
                         <option value="" selected>Course Category...</option>
                         <?php if (!empty($categories)) : ?>
                             <?php foreach ($categories as $cat) : ?>
-                                <option value="<?= $cat->id; ?>"><?= esc($cat->category); ?></option>
+                                <option <?= set_select('category_id', $cat->id); ?> value="<?= $cat->id; ?>"><?= esc($cat->category); ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
@@ -74,19 +74,31 @@
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Brandon Jacob</td>
-                        <td>Designer</td>
-                        <td>28</td>
-                        <td>2016-05-25</td>
-                        <td>2016-05-25</td>
-                        <td>
-                            <i class="bi bi-pencil-square"></i>
-                            <i class="bi bi-trash-fill"></i>
-                        </td>
-                    </tr>
+                    <?php if (!empty($rows)) : ?>
+                        <?php foreach ($rows as $row) : ?>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td><?=esc($row->title);?></td>
+                                <td><?=esc($row->category_id);?></td>
+                                <td><?=esc($row->price_id);?></td>
+                                <td><?=esc($row->primary_subject);?></td>
+                                <td><?=esc(get_date($row->date));?></td>
+                                <td>
+                                    <i class="bi bi-pencil-square"></i>
+                                    <i class="bi bi-trash-fill"></i>
+                                </td>
+                            </tr>
+
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td class="text-danger py-5" colspan="10">
+                                No courses yet.
+                            </td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
             <!-- End Table with stripped rows -->
