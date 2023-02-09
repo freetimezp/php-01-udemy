@@ -121,6 +121,9 @@ class Admin extends Controller
 
                 $data['errors'] = $course->errors;
             }
+        }else if($action == 'edit') {
+            //view single course
+            $data['row'] = $course->first(['user_id' => $user_id, 'id' => $id]);
         }else{
             //view courses
             $data['rows'] = $course->where(['user_id' => $user_id]);

@@ -22,9 +22,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    <input name="primary_subject" type="text" value="<?= set_value('primary_subject') ?>" 
-                    placeholder="Course primary subject e.g. Photography or Vlogging" 
-                    class="form-control <?= !empty($errors['primary_subject']) ? 'border-danger' : ''; ?>">
+                    <input name="primary_subject" type="text" value="<?= set_value('primary_subject') ?>" placeholder="Course primary subject e.g. Photography or Vlogging" class="form-control <?= !empty($errors['primary_subject']) ? 'border-danger' : ''; ?>">
 
                     <?php if (!empty($errors['title'])) : ?>
                         <small class="text-danger"><?= $errors['primary_subject']; ?></small>
@@ -57,7 +55,55 @@
 
         </div>
     </div>
+
 <?php elseif ($action == 'edit') : ?>
+
+    <div class="card">
+        <div class="card-body">
+
+            <?php if (!empty($row)) : ?>
+                <p class="card-title">
+                    Edit Course: 
+                    <big class="text-success "><?=esc($row->title);?></big>
+                </p>
+
+                <!-- Bordered Tabs Justified -->
+                <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
+                    </li>
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+                    </li>
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+                    </li>
+                </ul>
+                <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+                    <div class="tab-pane fade show active" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab">
+                        Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.
+                    </div>
+                    <div class="tab-pane fade" id="bordered-justified-profile" role="tabpanel" aria-labelledby="profile-tab">
+                        Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium distinctio omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio similique. Voluptate nihil recusandae mollitia dolores. Ut laboriosam voluptatum dicta.
+                    </div>
+                    <div class="tab-pane fade" id="bordered-justified-contact" role="tabpanel" aria-labelledby="contact-tab">
+                        Saepe animi et soluta ad odit soluta sunt. Nihil quos omnis animi debitis cumque. Accusantium quibusdam perspiciatis qui qui omnis magnam. Officiis accusamus impedit molestias nostrum veniam. Qui amet ipsum iure. Dignissimos fuga tempore dolor.
+                    </div>
+                </div><!-- End Bordered Tabs Justified -->
+                
+                <div class="text-center my-5">
+                    <button class="btn btn-success">Save</button>
+
+                    <a href="<?=ROOT;?>/admin/courses">
+                        <button class="btn btn-secondary">Back</button>
+                    </a>
+                </div>
+            <?php else: ?>
+                <div>That course was not found!</div>
+            <?php endif; ?>
+
+        </div>
+    </div>
 
 <?php else : ?>
     <div class="card">
@@ -90,21 +136,25 @@
                     <?php if (!empty($rows)) : ?>
                         <?php foreach ($rows as $row) : ?>
                             <tr>
-                                <th scope="row"><?=$row->id;?></th>
-                                <td><?=esc($row->title);?></td>
-                                <td><?=esc($row->user_row->name ?? 'Unknown');?></td>
-                                <td><?=esc($row->category_row->category ?? 'Unknown');?></td>
-                                <td><?=esc($row->price_row->name ?? 'Unknown');?></td>
-                                <td><?=esc($row->primary_subject);?></td>
-                                <td><?=esc(get_date($row->date));?></td>
+                                <th scope="row"><?= $row->id; ?></th>
+                                <td><?= esc($row->title); ?></td>
+                                <td><?= esc($row->user_row->name ?? 'Unknown'); ?></td>
+                                <td><?= esc($row->category_row->category ?? 'Unknown'); ?></td>
+                                <td><?= esc($row->price_row->name ?? 'Unknown'); ?></td>
+                                <td><?= esc($row->primary_subject); ?></td>
+                                <td><?= esc(get_date($row->date)); ?></td>
                                 <td>
-                                    <i class="bi bi-pencil-square"></i>
-                                    <i class="bi bi-trash-fill"></i>
+                                    <a href="<?= ROOT; ?>/admin/courses/edit/<?= $row->id; ?>">
+                                        <i class="bi bi-pencil-square text-primary"></i>
+                                    </a>
+                                    <a href="<?= ROOT; ?>/admin/courses/delete/<?= $row->id; ?>">
+                                        <i class="bi bi-trash-fill text-danger"></i>
+                                    </a>
                                 </td>
                             </tr>
 
                         <?php endforeach; ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <tr>
                             <td class="text-danger py-5" colspan="10">
                                 No courses yet.
