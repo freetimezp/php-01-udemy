@@ -45,6 +45,12 @@ class Course_model extends Model
             $this->errors['title'] = "Use letters, spaces and [-_&] in title.";
         }
 
+        if(empty($data['primary_subject'])) {
+            $this->errors['primary_subject'] = "Course primary subject is required.";
+        }else if(!preg_match("/^[a-zA-Z \-\_\&]+$/", trim($data['primary_subject']))) {
+            $this->errors['primary_subject'] = "Use letters, spaces and [-_&] in primary subject.";
+        }
+
         if(empty($data['category_id'])) {
             $this->errors['category_id'] = "Choose Category..";
         }
@@ -159,7 +165,21 @@ class Course_model extends Model
     }
 
     protected function get_price($rows) {
+        $db = new Database();
+        
+        if(!empty($rows[0]->price_id)) {
+            foreach($rows as $key => $row) {
+                $query = "SELECT * FROM prices WHERE id = :id LIMIT 1";
                 
+                $price = $db->query($query, ['id' => $row->price_id]);
+                if(!empty($price)) {
+                    $price[0]->name = $price[0]->name . ' ($ ' . $price[0]->price . ')';
+                    $rows[$key]->price_row = $price[0];
+                }
+            }
+        }
+        
+        
         return $rows;
     }
 

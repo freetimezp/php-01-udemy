@@ -22,6 +22,16 @@
                 </div>
 
                 <div class="col-md-12">
+                    <input name="primary_subject" type="text" value="<?= set_value('primary_subject') ?>" 
+                    placeholder="Course primary subject e.g. Photography or Vlogging" 
+                    class="form-control <?= !empty($errors['primary_subject']) ? 'border-danger' : ''; ?>">
+
+                    <?php if (!empty($errors['title'])) : ?>
+                        <small class="text-danger"><?= $errors['primary_subject']; ?></small>
+                    <?php endif; ?>
+                </div>
+
+                <div class="col-md-12">
                     <select name="category_id" id="inputState" class="form-select <?= !empty($errors['category_id']) ? 'border-danger' : ''; ?>">
                         <option value="" selected>Course Category...</option>
                         <?php if (!empty($categories)) : ?>
@@ -84,7 +94,7 @@
                                 <td><?=esc($row->title);?></td>
                                 <td><?=esc($row->user_row->name ?? 'Unknown');?></td>
                                 <td><?=esc($row->category_row->category ?? 'Unknown');?></td>
-                                <td><?=esc($row->price_id);?></td>
+                                <td><?=esc($row->price_row->name ?? 'Unknown');?></td>
                                 <td><?=esc($row->primary_subject);?></td>
                                 <td><?=esc(get_date($row->date));?></td>
                                 <td>

@@ -48,7 +48,6 @@ class Model extends Database
 
         // show($query);
         // show($data);
-        // die;
 
         $this->query($query, $data);
     }

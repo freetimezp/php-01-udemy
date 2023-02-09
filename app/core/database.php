@@ -54,9 +54,25 @@ Class Database
            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ";
 
+        $this->query($query);
+
+        //categories table
+        $query = "
+        CREATE TABLE IF NOT EXISTS `categories` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `category` varchar(50) NOT NULL,
+            `disabled` tinyint(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `category` (`category`),
+            KEY `disabled` (`disabled`)
+           ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8
+        ";
+
+        $this->query($query);
+
         //courses table
         $query = "
-        CREATE TABLE `courses` (
+        CREATE TABLE IF NOT EXISTS `courses` (
             `id` int(10) NOT NULL AUTO_INCREMENT,
             `title` varchar(100) NOT NULL,
             `description` text DEFAULT NULL,
@@ -89,6 +105,30 @@ Class Database
             KEY `approved` (`approved`),
             KEY `published` (`published`)
            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ";
+
+        $this->query($query);
+
+        //prices table
+        $query = "
+        CREATE TABLE IF NOT EXISTS `prices` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `name` varchar(40) NOT NULL,
+            `price` decimal(10,0) NOT NULL,
+            `disabled` tinyint(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `name` (`name`),
+            KEY `price` (`price`),
+            KEY `disabled` (`disabled`),
+            KEY `disabled_2` (`disabled`)
+           ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
+        ";
+
+        $this->query($query);
+
+        //insert into prices table
+        $query = "
+        INSERT INTO `prices` (`id`, `name`, `price`, `disabled`) VALUES (1, 'Free', '0', 0);
         ";
 
         $this->query($query);

@@ -103,6 +103,7 @@ class Admin extends Controller
                 if($course->validate($_POST)) {
                     $_POST['date'] = date("Y-m-d H:i:s");
                     $_POST['user_id'] = $user_id;
+                    $_POST['price_id'] = 1;
 
                     $course->insert($_POST);
 
