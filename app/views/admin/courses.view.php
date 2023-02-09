@@ -100,21 +100,26 @@
                         </button>
                     </li>
                 </ul>
-                <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+                <div oninput="something_changed(event)" class="tab-content pt-2" id="borderedTabJustifiedContent">
                     <div class="tab-pane fade show active" id="intended-learners" role="tabpanel" aria-labelledby="intended-learners">
                         1
+                        <input type="text" name="">
                     </div>
                     <div class="tab-pane fade" id="curriculum" role="tabpanel" aria-labelledby="curriculum">
                         2
+                        <input type="text" name="">
                     </div>
                     <div class="tab-pane fade" id="course-landing-page" role="tabpanel" aria-labelledby="course-landing-page">
                         3
+                        <input type="text" name="">
                     </div>
                     <div class="tab-pane fade" id="promotions" role="tabpanel" aria-labelledby="promotions">
                         4
+                        <input type="text" name="">
                     </div>
                     <div class="tab-pane fade" id="course-messages" role="tabpanel" aria-labelledby="course-messages">
                         5
+                        <input type="text" name="">
                     </div>
                 </div><!-- End Bordered Tabs Justified -->
 
@@ -198,6 +203,7 @@
 
 <script>
     var tab = sessionStorage.getItem("tab") ? sessionStorage.getItem("tab") : "#intended-learners";
+    var dirty = false;
 
     function show_tab(tab_name) {
         const someTabTriggerEl = document.querySelector(tab_name + "-tab");
@@ -208,6 +214,24 @@
     function set_tab(tab_name) {
         tab = tab_name;
         sessionStorage.setItem("tab", tab_name);
+
+        if(dirty) {
+            //ask user to save on switching tabs
+            if(!confirm("Your changes were not saved, are you sure want to switch tab?")) {
+                tab = dirty;
+                sessionStorage.setItem("tab", dirty);
+
+                setTimeout(function() {
+                    show_tab(dirty);
+                }, 100);
+            }else{
+                dirty = false;
+            }
+        }
+    }
+
+    function something_changed(e) {
+        dirty = tab;
     }
 </script>
 
