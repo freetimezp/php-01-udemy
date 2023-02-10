@@ -1,5 +1,30 @@
 <?php $this->view("admin/admin-header", $data); ?>
 
+<style>
+    .tabs-holder {
+        justify-content: center;
+        align-items: center;
+    }
+    .my-tab {
+        flex: 1;
+        text-align: center;
+        border-bottom: 2px solid #ccc;
+        padding-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease-in;
+    }
+    .my-tab:hover {
+        color: #4154F1;
+    }
+    .active-tab {
+        color: #4154F1;
+        border-color: #4154F1;
+    }
+    .hide {
+        display: none;
+    }
+</style>
+
 <?php if (message()) : ?>
     <div class="alert alert-success text-center">
         <?= message('', true); ?>
@@ -67,61 +92,35 @@
                     <span class="text-success mx-2"><?= esc($row->title); ?></span>
                 </p>
 
-                <!-- Bordered Tabs Justified -->
-                <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
-                    <li class="nav-item flex-fill" role="presentation">
-                        <button class="nav-link w-100 active" id="intended-learners-tab" data-bs-toggle="tab" data-bs-target="#intended-learners" type="button" role="tab" aria-controls="intended-learners" aria-selected="true"
-                        onclick="set_tab(this.getAttribute('data-bs-target'))">
-                            Intended Learners
-                        </button>
-                    </li>
-                    <li class="nav-item flex-fill" role="presentation">
-                        <button class="nav-link w-100" id="curriculum-tab" data-bs-toggle="tab" data-bs-target="#curriculum" type="button" role="tab" aria-controls="curriculum" aria-selected="false"
-                        onclick="set_tab(this.getAttribute('data-bs-target'))">
-                            Curriculum
-                        </button>
-                    </li>
-                    <li class="nav-item flex-fill" role="presentation">
-                        <button class="nav-link w-100" id="course-landing-page-tab" data-bs-toggle="tab" data-bs-target="#course-landing-page" type="button" role="tab" aria-controls="course-landing-page" aria-selected="false"
-                        onclick="set_tab(this.getAttribute('data-bs-target'))">
-                            Course landing page
-                        </button>
-                    </li>
-                    <li class="nav-item flex-fill" role="presentation-tab">
-                        <button class="nav-link w-100" id="promotions" data-bs-toggle="tab" data-bs-target="#promotions" type="button" role="tab" aria-controls="promotions" aria-selected="false"
-                        onclick="set_tab(this.getAttribute('data-bs-target'))">
-                            Promotions
-                        </button>
-                    </li>
-                    <li class="nav-item flex-fill" role="presentation-tab">
-                        <button class="nav-link w-100" id="course-messages" data-bs-toggle="tab" data-bs-target="#course-messages" type="button" role="tab" aria-controls="course-messages" aria-selected="false"
-                        onclick="set_tab(this.getAttribute('data-bs-target'))">
-                            Course messages
-                        </button>
-                    </li>
-                </ul>
-                <div oninput="something_changed(event)" class="tab-content pt-2" id="borderedTabJustifiedContent">
-                    <div class="tab-pane fade show active" id="intended-learners" role="tabpanel" aria-labelledby="intended-learners">
-                        1
-                        <input type="text" name="">
+                <!-- Tabs -->
+                <div class="tabs-holder d-flex my-10">
+                    <div id="intended-learners" class="my-tab active-tab" onclick="set_tab(this.id, this)">
+                        Intended Learners
                     </div>
-                    <div class="tab-pane fade" id="curriculum" role="tabpanel" aria-labelledby="curriculum">
-                        2
-                        <input type="text" name="">
+                    <div id="curriculum" class="my-tab" onclick="set_tab(this.id, this)">
+                        Curriculum
                     </div>
-                    <div class="tab-pane fade" id="course-landing-page" role="tabpanel" aria-labelledby="course-landing-page">
-                        3
-                        <input type="text" name="">
+                    <div id="course-landing-page" class="my-tab" onclick="set_tab(this.id, this)">
+                        Course landing page
                     </div>
-                    <div class="tab-pane fade" id="promotions" role="tabpanel" aria-labelledby="promotions">
-                        4
-                        <input type="text" name="">
+                    <div id="promotions" class="my-tab" onclick="set_tab(this.id, this)">
+                        Promotions
                     </div>
-                    <div class="tab-pane fade" id="course-messages" role="tabpanel" aria-labelledby="course-messages">
-                        5
-                        <input type="text" name="">
+                    <div id="course-messages" class="my-tab" onclick="set_tab(this.id, this)">
+                        Course messages
                     </div>
-                </div><!-- End Bordered Tabs Justified -->
+                </div>
+                <!-- End Tabs -->
+
+                <!-- Tabs Body-->
+                <div oninput="something_changed(event)">
+                    <div class="div-tab" id="intended-learners-div">1</div>
+                    <div class="div-tab hide" id="curriculum-div">2</div>
+                    <div class="div-tab hide" id="course-landing-page-div">3</div>
+                    <div class="div-tab hide" id="promotions-div">4</div>
+                    <div class="div-tab hide" id="course-messages-div">5</div>
+                </div>
+                <!-- End Tabs Body-->
 
                 <div class="text-center my-5">
                     <button class="btn btn-success disabled js-save-button">Save</button>
@@ -213,25 +212,37 @@
         disable_save_button(false);
     }
 
-    function set_tab(tab_name) {
-        tab = tab_name;
-        sessionStorage.setItem("tab", tab_name);
-
-        if(dirty) {
-            //ask user to save on switching tabs
-            if(!confirm("Your changes were not saved, are you sure want to switch tab?")) {
-                tab = dirty;
-                sessionStorage.setItem("tab", dirty);
-
-                setTimeout(function() {
-                    show_tab(dirty);
-                    disable_save_button(true);
-                }, 100);
-            }else{
-                dirty = false;
-                disable_save_button(false);
-            }
+    function set_tab(tab_name, div) {
+        var children = document.querySelectorAll(".my-tab");
+        for(var i = 0; i < children.length; i++) {
+            children[i].classList.remove("active-tab");
         }
+        div.classList.add("active-tab");
+        
+        children = document.querySelectorAll(".div-tab");
+        for(var i = 0; i < children.length; i++) {
+            children[i].classList.add("hide");
+        }
+        document.querySelector("#" + tab_name + "-div").classList.remove("hide");
+
+        // tab = tab_name;
+        // sessionStorage.setItem("tab", tab_name);
+
+        // if(dirty) {
+        //     //ask user to save on switching tabs
+        //     if(!confirm("Your changes were not saved, are you sure want to switch tab?")) {
+        //         tab = dirty;
+        //         sessionStorage.setItem("tab", dirty);
+
+        //         setTimeout(function() {
+        //             show_tab(dirty);
+        //             disable_save_button(true);
+        //         }, 100);
+        //     }else{
+        //         dirty = false;
+        //         disable_save_button(false);
+        //     }
+        // }
     }
 
     function something_changed(e) {
