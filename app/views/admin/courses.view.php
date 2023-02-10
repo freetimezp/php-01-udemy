@@ -5,6 +5,7 @@
         justify-content: center;
         align-items: center;
     }
+
     .my-tab {
         flex: 1;
         text-align: center;
@@ -13,13 +14,16 @@
         cursor: pointer;
         transition: all 0.3s ease-in;
     }
+
     .my-tab:hover {
         color: #4154F1;
     }
+
     .active-tab {
         color: #4154F1;
         border-color: #4154F1;
     }
+
     .hide {
         display: none;
     }
@@ -70,7 +74,7 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Save</button>    
+                    <button type="submit" class="btn btn-primary">Save</button>
 
                     <a href="<?= ROOT; ?>/admin/courses">
                         <button type="button" class="btn btn-secondary">Cancel</button>
@@ -114,11 +118,9 @@
 
                 <!-- Tabs Body-->
                 <div oninput="something_changed(event)">
-                    <div class="div-tab" id="intended-learners-div">1</div>
-                    <div class="div-tab hide" id="curriculum-div">2</div>
-                    <div class="div-tab hide" id="course-landing-page-div">3</div>
-                    <div class="div-tab hide" id="promotions-div">4</div>
-                    <div class="div-tab hide" id="course-messages-div">5</div>
+                    <div class="div-tab" id="tabs-content">
+                        1
+                    </div>
                 </div>
                 <!-- End Tabs Body-->
 
@@ -201,48 +203,36 @@
 <?php endif; ?>
 
 <script>
-    var tab = sessionStorage.getItem("tab") ? sessionStorage.getItem("tab") : "#intended-learners";
+    var tab = sessionStorage.getItem("tab") ? sessionStorage.getItem("tab") : "intended-learners";
     var dirty = false;
 
     function show_tab(tab_name) {
-        const someTabTriggerEl = document.querySelector(tab_name + "-tab");
-        const tab = new bootstrap.Tab(someTabTriggerEl);
-        tab.show();
+        //change active tab
+        var div = document.querySelector("#" + tab_name);
+        var children = document.querySelectorAll(".my-tab");
+        for (var i = 0; i < children.length; i++) {
+            children[i].classList.remove("active-tab");
+        }
+        div.classList.add("active-tab");
+
+        var content = tab_name + "<input />";
+        document.querySelector("#tabs-content").innerHTML = content;
 
         disable_save_button(false);
     }
 
-    function set_tab(tab_name, div) {
-        var children = document.querySelectorAll(".my-tab");
-        for(var i = 0; i < children.length; i++) {
-            children[i].classList.remove("active-tab");
+    function set_tab(tab_name) {
+        if (dirty) {
+            //ask user to save on switching tabs
+            if (!confirm("Your changes were not saved, are you sure want to switch tab?")) {
+               return;
+            }
         }
-        div.classList.add("active-tab");
-        
-        children = document.querySelectorAll(".div-tab");
-        for(var i = 0; i < children.length; i++) {
-            children[i].classList.add("hide");
-        }
-        document.querySelector("#" + tab_name + "-div").classList.remove("hide");
 
-        // tab = tab_name;
-        // sessionStorage.setItem("tab", tab_name);
-
-        // if(dirty) {
-        //     //ask user to save on switching tabs
-        //     if(!confirm("Your changes were not saved, are you sure want to switch tab?")) {
-        //         tab = dirty;
-        //         sessionStorage.setItem("tab", dirty);
-
-        //         setTimeout(function() {
-        //             show_tab(dirty);
-        //             disable_save_button(true);
-        //         }, 100);
-        //     }else{
-        //         dirty = false;
-        //         disable_save_button(false);
-        //     }
-        // }
+        tab = tab_name;
+        sessionStorage.setItem("tab", tab_name);
+        dirty = false;
+        show_tab(tab_name);
     }
 
     function something_changed(e) {
@@ -251,9 +241,9 @@
     }
 
     function disable_save_button(status = false) {
-        if(status) {
+        if (status) {
             document.querySelector(".js-save-button").classList.remove("disabled");
-        }else{
+        } else {
             document.querySelector(".js-save-button").classList.add("disabled");
         }
     }
