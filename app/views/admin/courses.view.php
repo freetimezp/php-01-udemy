@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>    
 
                     <a href="<?= ROOT; ?>/admin/courses">
                         <button type="button" class="btn btn-secondary">Cancel</button>
@@ -62,9 +62,9 @@
         <div class="card-body">
 
             <?php if (!empty($row)) : ?>
-                <p class="card-title">
-                    Edit Course:
-                    <big class="text-success "><?= esc($row->title); ?></big>
+                <p class="card-title d-flex align-items-center">
+                    <span>Edit Course: </span>
+                    <span class="text-success mx-2"><?= esc($row->title); ?></span>
                 </p>
 
                 <!-- Bordered Tabs Justified -->
@@ -124,7 +124,7 @@
                 </div><!-- End Bordered Tabs Justified -->
 
                 <div class="text-center my-5">
-                    <button class="btn btn-success">Save</button>
+                    <button class="btn btn-success disabled js-save-button">Save</button>
 
                     <a href="<?= ROOT; ?>/admin/courses">
                         <button class="btn btn-secondary">Back</button>
@@ -209,6 +209,8 @@
         const someTabTriggerEl = document.querySelector(tab_name + "-tab");
         const tab = new bootstrap.Tab(someTabTriggerEl);
         tab.show();
+
+        disable_save_button(false);
     }
 
     function set_tab(tab_name) {
@@ -223,15 +225,26 @@
 
                 setTimeout(function() {
                     show_tab(dirty);
+                    disable_save_button(true);
                 }, 100);
             }else{
                 dirty = false;
+                disable_save_button(false);
             }
         }
     }
 
     function something_changed(e) {
         dirty = tab;
+        disable_save_button(true);
+    }
+
+    function disable_save_button(status = false) {
+        if(status) {
+            document.querySelector(".js-save-button").classList.remove("disabled");
+        }else{
+            document.querySelector(".js-save-button").classList.add("disabled");
+        }
     }
 </script>
 
