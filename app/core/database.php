@@ -91,7 +91,9 @@ Class Database
             `congratulations_message` varchar(2048) DEFAULT NULL,
             `welcome_message` varchar(2048) DEFAULT NULL,
             `approved` tinyint(1) NOT NULL DEFAULT 0,
-            `published` tinyint(1) NOT NULL DEFAULT 0
+            `published` tinyint(1) NOT NULL DEFAULT 0,
+            `subtitle` varchar(1024) DEFAULT NULL,
+            `currency_id` int(11) DEFAULT NULL
             PRIMARY KEY (`id`),
             KEY `title` (`title`),
             KEY `user_id` (`user_id`),

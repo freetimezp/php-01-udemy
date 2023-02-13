@@ -124,6 +124,17 @@ class Admin extends Controller
         }else if($action == 'edit') {
             //view single course
             $data['row'] = $course->first(['user_id' => $user_id, 'id' => $id]);
+
+            if($_SERVER['REQUEST_METHOD'] == "POST") {
+                if(!empty($_POST['data_type']) && $_POST['data_type'] == "read") {
+                    if($_POST['tab_name'] == "course-landing-page") {
+                        include views_path("course-edit-tabs/course-landing-page");
+                    }
+
+                    //echo "<input />";
+                }
+                die;
+            }
         }else{
             //view courses
             $data['rows'] = $course->where(['user_id' => $user_id]);

@@ -27,6 +27,14 @@
     .hide {
         display: none;
     }
+
+    .loader {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 </style>
 
 <?php if (message()) : ?>
@@ -119,7 +127,7 @@
                 <!-- Tabs Body-->
                 <div oninput="something_changed(event)">
                     <div class="div-tab" id="tabs-content">
-                        1
+
                     </div>
                 </div>
                 <!-- End Tabs Body-->
@@ -208,6 +216,9 @@
 
     function show_tab(tab_name) {
         //change active tab
+        var contentDiv = document.querySelector("#tabs-content");
+        show_loader(contentDiv);
+
         var div = document.querySelector("#" + tab_name);
         var children = document.querySelectorAll(".my-tab");
         for (var i = 0; i < children.length; i++) {
@@ -215,17 +226,48 @@
         }
         div.classList.add("active-tab");
 
-        var content = tab_name + "<input />";
-        document.querySelector("#tabs-content").innerHTML = content;
+        send_data({
+            tab_name: tab,
+            data_type: "read",
+            course_id: '<?=$row->id ?? '';?>',
+        });
 
         disable_save_button(false);
+    }
+
+    function send_data(obj) {
+        var myform = new FormData();
+        for (key in obj) {
+            myform.append(key, obj[key]);
+        }
+
+        var ajax = new XMLHttpRequest();
+        ajax.addEventListener("readystatechange", function() {
+            if (ajax.readyState == 4) {
+                if (ajax.status == 200) {
+                    //everything well
+                    handle_result(ajax.responseText);
+                } else {
+                    //server return error
+                    alert("error");
+                }
+            }
+        });
+
+        ajax.open('post', '', true);
+        ajax.send(myform);
+    }
+
+    function handle_result(result) {
+        var contentDiv = document.querySelector("#tabs-content");
+        contentDiv.innerHTML = result;
     }
 
     function set_tab(tab_name) {
         if (dirty) {
             //ask user to save on switching tabs
             if (!confirm("Your changes were not saved, are you sure want to switch tab?")) {
-               return;
+                return;
             }
         }
 
@@ -247,6 +289,12 @@
             document.querySelector(".js-save-button").classList.add("disabled");
         }
     }
+
+    function show_loader(item) {
+        item.innerHTML = '<img src="<?= ROOT ?>/assets/images/loader.gif" alt="loader" class="loader">';
+    }
+
+    show_tab(tab);
 </script>
 
 <?php $this->view("admin/admin-footer", $data); ?>
