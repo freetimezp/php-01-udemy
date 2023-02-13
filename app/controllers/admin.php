@@ -93,10 +93,9 @@ class Admin extends Controller
         $data['id'] = $id;
 
         $course = new Course_model();
+        $category = new Category_model();
 
         if($action == 'add') {
-            $category = new Category_model();
-
             $data['categories'] = $category->findAll("ASC");
 
             if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -123,9 +122,10 @@ class Admin extends Controller
             }
         }else if($action == 'edit') {
             //view single course
-            $data['row'] = $course->first(['user_id' => $user_id, 'id' => $id]);
+            $categories = $category->findAll("ASC");
+            $data['row'] = $row = $course->first(['user_id' => $user_id, 'id' => $id]);
 
-            if($_SERVER['REQUEST_METHOD'] == "POST") {
+            if($_SERVER['REQUEST_METHOD'] == "POST" && $row) {
                 if(!empty($_POST['data_type']) && $_POST['data_type'] == "read") {
                     if($_POST['tab_name'] == "course-landing-page") {
                         include views_path("course-edit-tabs/course-landing-page");

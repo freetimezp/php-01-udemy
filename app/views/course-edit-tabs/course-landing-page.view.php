@@ -2,18 +2,18 @@
     <div class="col-md-8 mx-auto">
         <div class="input-group my-3">
             <span class="input-group-text col-sm-2">Course Title</span>
-            <input type="text" name="title" class="form-control col-sm-10" placeholder="Course title">
+            <input type="text" value="<?= $row->title; ?>" name="title" class="form-control col-sm-10" placeholder="Course title">
         </div>
 
         <div class="input-group mb-3">
             <span class="input-group-text col-sm-2">Course Subtitle</span>
-            <input type="text" name="subtitle" class="form-control col-sm-10" placeholder="Course subtitle">
+            <input type="text" value="<?= $row->subtitle; ?>" name="subtitle" class="form-control col-sm-10" placeholder="Course subtitle">
         </div>
 
         <div class="row mb-3">
             <label class="col-sm-2 ps-4">Course Description</label>
             <div class="col-sm-10">
-                <textarea name="description" class="form-control" style="height: 100px;"></textarea>
+                <textarea name="description" class="form-control" style="height: 100px;"><?= $row->description; ?>          </textarea>
             </div>
         </div>
 
@@ -31,6 +31,11 @@
             <div class="col-md-4 mb-3 p-1">
                 <select class="form-select" name="category_id">
                     <option>--Select Category--</option>
+                    <?php if (!empty($categories)) : ?>
+                        <?php foreach ($categories as $cat) : ?>
+                            <option <?= set_select('category_id', $cat->id, $row->category_id); ?> value="<?= $cat->id; ?>"><?= esc($cat->category); ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
             </div>
             <div class="col-md-4 mb-3 p-1">
@@ -56,7 +61,7 @@
 
         <div class="input-group my-3">
             <span class="input-group-text col-sm-2">Primary Subject</span>
-            <input type="text" name="primary_subject" class="form-control col-sm-10" placeholder="Primary Subject">
+            <input type="text" value="<?= $row->primary_subject; ?>" name="primary_subject" class="form-control col-sm-10" placeholder="Primary Subject">
         </div>
 
         <div class="row my-4">

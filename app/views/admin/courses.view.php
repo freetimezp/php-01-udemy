@@ -229,7 +229,6 @@
         send_data({
             tab_name: tab,
             data_type: "read",
-            course_id: '<?=$row->id ?? '';?>',
         });
 
         disable_save_button(false);

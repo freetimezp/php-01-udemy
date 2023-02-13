@@ -1,32 +1,34 @@
-<?php 
+<?php
 
-Class Database 
+class Database
 {
-    public function connect() {
+    public function connect()
+    {
         try {
             $string = DB_DRIVER . ":host=" . DB_HOST . ";dbname=" . DB_NAME . ";";
             return $db = new PDO($string, DB_USER, DB_PASS);
             //show($db);
-        }catch(PDOException $e) {
+        } catch (PDOException $e) {
             die($e->getMessage());
         }
     }
 
-    public function query($query, $data = [], $type = 'object') {
+    public function query($query, $data = [], $type = 'object')
+    {
         $con = $this->connect();
         //show($con);
 
         $stm = $con->prepare($query);
-        if($stm) {
+        if ($stm) {
             $check = $stm->execute($data);
-            if($check) {
-                if($type == 'object') {
+            if ($check) {
+                if ($type == 'object') {
                     $type = PDO::FETCH_OBJ;
-                }else{
+                } else {
                     $type = PDO::FETCH_ASSOC;
                 }
                 $result = $stm->fetchAll($type);
-                if(is_array($result) && count($result) > 0) {
+                if (is_array($result) && count($result) > 0) {
                     return $result;
                 }
             }
@@ -35,7 +37,8 @@ Class Database
         return false;
     }
 
-    public function create_tables() {
+    public function create_tables()
+    {
         //users table
         $query = "
             CREATE TABLE IF NOT EXISTS `users` (
@@ -66,6 +69,27 @@ Class Database
             KEY `category` (`category`),
             KEY `disabled` (`disabled`)
            ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8
+        ";
+
+        $this->query($query);
+
+        //insert into categories table
+        $query = "
+        INSERT INTO `categories` (`id`, `category`, `disabled`) VALUES
+            (1, 'Development', 0),
+            (2, 'Business', 0),
+            (3, 'Finance & Accounting', 0),
+            (4, 'IT & Software', 0),
+            (5, 'Office Productivity', 0),
+            (6, 'Personal Development', 0),
+            (7, 'Design', 0),
+            (8, 'Marketing', 0),
+            (9, 'Lifestyle', 0),
+            (10, 'Photography & Video', 0),
+            (11, 'Health & Fitness', 0),
+            (12, 'Music', 0),
+            (13, 'Teaching & Academics', 0),
+            (14, 'I dont know yet..', 0);
         ";
 
         $this->query($query);
@@ -111,6 +135,15 @@ Class Database
 
         $this->query($query);
 
+        //insert into courses table
+        $query = "
+        INSERT INTO `courses` (`id`, `title`, `description`, `user_id`, `category_id`, `sub_category_id`, `level_id`, `language_id`, `price_id`, `promo_link`, `course_image`, `course_promo_video`, `primary_subject`, `date`, `tags`, `congratulations_message`, `welcome_message`, `approved`, `published`, `subtitle`, `currency_id`) VALUES
+        (1, 'test', NULL, 1, 4, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2023-02-08 18:37:03', NULL, NULL, NULL, 0, 0, '', 0),
+        (5, 'Photography for begginers', 'some descr', 1, 10, NULL, NULL, NULL, 1, NULL, NULL, NULL, 'Photography', '2023-02-09 17:47:46', NULL, NULL, NULL, 0, 0, '', 0);               
+        ";
+
+        $this->query($query);
+
         //prices table
         $query = "
         CREATE TABLE IF NOT EXISTS `prices` (
@@ -134,48 +167,121 @@ Class Database
         ";
 
         $this->query($query);
+
+        //course levels table
+        $query = "
+        CREATE TABLE IF NOT EXISTS `course_levels` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `level` varchar(30) NOT NULL,
+            `disabled` tinyint(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `level` (`level`)
+           ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8
+        ";
+
+        $this->query($query);
+
+        //insert into course levels table
+        $query = "
+        INSERT INTO `course_levels` (`id`, `level`, `disabled`) VALUES
+            (1, 'Beginner Level', 0),
+            (2, 'Intermediate Level', 0),
+            (3, 'Expert Level', 0),
+            (4, 'All Levels', 0);
+        ";
+
+        $this->query($query);
+
+
+        //currencies table
+        $query = "
+        CREATE TABLE IF NOT EXISTS `currencies` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `currency` varchar(20) NOT NULL,
+            `symbol` varchar(4) NOT NULL,
+            `disabled` tinyint(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `disabled` (`disabled`)
+           ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
+        ";
+
+        $this->query($query);
+
+        //insert into currencies table
+        $query = "
+        INSERT INTO `currencies` (`id`, `currency`, `symbol`, `disabled`) VALUES
+            (1, 'US Dollar', '$', 0);
+        ";
+
+        $this->query($query);
+
+        //languages table
+        $query = "
+        CREATE TABLE IF NOT EXISTS `languages` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `symbol` varchar(10) NOT NULL,
+            `language` varchar(30) NOT NULL,
+            `disabled` tinyint(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `disabled` (`disabled`)
+           ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
+        ";
+
+        $this->query($query);
+
+        //insert into languages table
+        $query = "
+        INSERT INTO `languages` (`id`, `symbol`, `language`, `disabled`) VALUES
+            (1, 'uk_UA', 'РЈРєСЂР°С—РЅСЃСЊРєР°', 0),
+            (2, 'us_US', 'USA', 0),
+            (3, 'ru_RU', 'Р СѓСЃСЃРєРёР№', 0);
+        ";
+
+        $this->query($query);
     }
 
-    public function read($query, $data = []) {
+    public function read($query, $data = [])
+    {
         $DB = $this->connect();
         //show($DB);
         $stm = $DB->prepare($query);
 
-        if(count($data) == 0) {
+        if (count($data) == 0) {
             $stm = $DB->query($query);
             $check = 0;
-            if($stm) {
+            if ($stm) {
                 $check = 1;
             }
-        }else{
+        } else {
             $check = $stm->execute($data);
         }
 
-        if($check) {
+        if ($check) {
             return $stm->fetchAll(PDO::FETCH_OBJ);
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function write($query, $data = []) {
+    public function write($query, $data = [])
+    {
         $DB = $this->connect();
         //show($DB);
         $stm = $DB->prepare($query);
 
-        if(count($data) == 0) {
+        if (count($data) == 0) {
             $stm = $DB->query($query);
             $check = 0;
-            if($stm) {
+            if ($stm) {
                 $check = 1;
             }
-        }else{
+        } else {
             $check = $stm->execute($data);
         }
 
-        if($check) {
+        if ($check) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
