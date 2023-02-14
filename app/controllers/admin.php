@@ -94,6 +94,10 @@ class Admin extends Controller
 
         $course = new Course_model();
         $category = new Category_model();
+        $language = new Language_model();
+        $level = new Level_model();
+        $price = new Price_model();
+        $currency = new Currency_model();
 
         if($action == 'add') {
             $data['categories'] = $category->findAll("ASC");
@@ -123,6 +127,11 @@ class Admin extends Controller
         }else if($action == 'edit') {
             //view single course
             $categories = $category->findAll("ASC");
+            $languages = $language->findAll("ASC");
+            $levels = $level->findAll("ASC");
+            $prices = $price->findAll("ASC");
+            $currencies = $currency->findAll("ASC");
+
             $data['row'] = $row = $course->first(['user_id' => $user_id, 'id' => $id]);
 
             if($_SERVER['REQUEST_METHOD'] == "POST" && $row) {

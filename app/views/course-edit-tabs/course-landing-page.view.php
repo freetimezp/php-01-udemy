@@ -21,11 +21,21 @@
             <div class="col-md-4 mb-3 p-1">
                 <select class="form-select" name="language_id">
                     <option>--Select Language--</option>
+                    <?php if (!empty($languages)) : ?>
+                        <?php foreach ($languages as $lang) : ?>
+                            <option <?= set_select('language_id', $lang->id, $row->language_id); ?> value="<?= $lang->id; ?>"><?= esc($lang->language); ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
             </div>
             <div class="col-md-4 mb-3 p-1">
                 <select class="form-select" name="level_id">
                     <option>--Select Level--</option>
+                    <?php if (!empty($levels)) : ?>
+                        <?php foreach ($levels as $level) : ?>
+                            <option <?= set_select('level_id', $level->id, $row->level_id); ?> value="<?= $level->id; ?>"><?= esc($level->level); ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
             </div>
             <div class="col-md-4 mb-3 p-1">
@@ -50,11 +60,21 @@
             <div class="col-md-4 mb-3 p-1">
                 <select name="currency_id" class="form-select">
                     <option>--Select Currency--</option>
+                    <?php if (!empty($currencies)) : ?>
+                        <?php foreach ($currencies as $currency) : ?>
+                            <option <?= set_select('currency_id', $currency->id, $row->currency_id); ?> value="<?= $currency->id; ?>"><?= esc($currency->currency . " ($currency->symbol)"); ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
             </div>
             <div class="col-md-4 mb-3 p-1">
                 <select name="price_id" class="form-select">
                     <option>--Select Price--</option>
+                    <?php if (!empty($prices)) : ?>
+                        <?php foreach ($prices as $price) : ?>
+                            <option <?= set_select('price_id', $price->id, $row->price_id); ?> value="<?= $price->id; ?>"><?= esc($price->name . " (" . $price->price . ")"); ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
             </div>
         </div>
