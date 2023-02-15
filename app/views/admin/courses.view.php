@@ -133,7 +133,7 @@
                 <!-- End Tabs Body-->
 
                 <div class="text-center my-5">
-                    <button class="btn btn-success disabled js-save-button">Save</button>
+                    <button onclick="save_content()" class="btn btn-success disabled js-save-button">Save</button>
 
                     <a href="<?= ROOT; ?>/admin/courses">
                         <button class="btn btn-secondary">Back</button>
@@ -258,8 +258,19 @@
     }
 
     function handle_result(result) {
-        var contentDiv = document.querySelector("#tabs-content");
-        contentDiv.innerHTML = result;
+        if(result.substr(0,2) == '{"') {
+            var obj = JSON.parse(result);
+
+            if(typeof obj == "object") {
+                if(obj.data_type == "save") {
+                    alert(obj.data);
+                    disable_save_button(false);
+                }
+            }
+        }else{
+            var contentDiv = document.querySelector("#tabs-content");
+            contentDiv.innerHTML = result;
+        }
     }
 
     function set_tab(tab_name) {
@@ -294,6 +305,24 @@
     }
 
     show_tab(tab);
+
+    //saving content
+    function save_content() {
+        var content = document.querySelector("#tabs-content");
+        var inputs = content.querySelectorAll("input, textarea, select");
+
+        //console.log(inputs);
+        var obj = {};
+        obj.data_type = "save";
+        obj.tab_name = tab;
+
+        for (let i = 0; i < inputs.length; i++) {
+            var key = inputs[i].name;
+            obj[key] = inputs[i].value;
+        }
+
+        send_data(obj);
+    }
 </script>
 
 <?php $this->view("admin/admin-footer", $data); ?>

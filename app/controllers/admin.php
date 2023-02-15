@@ -4,9 +4,9 @@ class Admin extends Controller
 {
     public function index()
     {
-        if(!Auth::logged_in()) {
+        if (!Auth::logged_in()) {
             message('Please login to view the admin section');
-            redirect('login'); 
+            redirect('login');
         }
 
         $data['title'] = "Dashboard";
@@ -15,29 +15,29 @@ class Admin extends Controller
 
     public function profile($id = null)
     {
-        if(!Auth::logged_in()) {
+        if (!Auth::logged_in()) {
             message('Please login to view the profile section');
-            redirect('login'); 
+            redirect('login');
         }
 
         $id = $id ?? Auth::getId();
         $user = new User();
         $data['row'] = $row = $user->first(['id' => $id]);
 
-        if($_SERVER['REQUEST_METHOD'] == "POST" && $row) {
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && $row) {
             $folder = "uploads/images/";
-            if(!file_exists($folder)) {
-                mkdir($folder,0777,true);
+            if (!file_exists($folder)) {
+                mkdir($folder, 0777, true);
                 file_put_contents($folder . "index.php", "<?php //no access");
                 file_put_contents("uploads/index.php", "<?php //no access");
             }
 
-            if($user->edit_validate($_POST, $id)) {
+            if ($user->edit_validate($_POST, $id)) {
                 $allowed = ['image/jpeg', 'image/png'];
 
-                if(!empty($_FILES['image']['name'])) {
-                    if($_FILES['image']['error'] == 0) {
-                        if(in_array($_FILES['image']['type'], $allowed)) {
+                if (!empty($_FILES['image']['name'])) {
+                    if ($_FILES['image']['error'] == 0) {
+                        if (in_array($_FILES['image']['type'], $allowed)) {
                             //if is all good
                             $destination = $folder . time() . $_FILES['image']['name'];
                             move_uploaded_file($_FILES['image']['tmp_name'], $destination);
@@ -46,13 +46,13 @@ class Admin extends Controller
 
                             $_POST['image'] = $destination;
 
-                            if(file_exists($row->image)) {
+                            if (file_exists($row->image)) {
                                 unlink($row->image);
                             }
-                        }else{
+                        } else {
                             $user->errors['image'] = "An error occured with type image";
                         }
-                    }else{
+                    } else {
                         $user->errors['image'] = "An error occured with upload image";
                     }
                 }
@@ -62,9 +62,9 @@ class Admin extends Controller
                 //redirect('admin/profile/' . $id);
             }
 
-            if(empty($user->errors)) {
+            if (empty($user->errors)) {
                 $arr['message'] = "Profile saved successfully!";
-            }else{
+            } else {
                 $arr['message'] = "Please try to fix errors..";
                 $arr['errors'] = $user->errors;
             }
@@ -81,9 +81,9 @@ class Admin extends Controller
 
     public function courses($action = null, $id = null)
     {
-        if(!Auth::logged_in()) {
+        if (!Auth::logged_in()) {
             message('Please login to view the profile section');
-            redirect('login'); 
+            redirect('login');
         }
 
         $user_id = Auth::getId();
@@ -99,11 +99,11 @@ class Admin extends Controller
         $price = new Price_model();
         $currency = new Currency_model();
 
-        if($action == 'add') {
+        if ($action == 'add') {
             $data['categories'] = $category->findAll("ASC");
 
-            if($_SERVER['REQUEST_METHOD'] == "POST") {
-                if($course->validate($_POST)) {
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                if ($course->validate($_POST)) {
                     $_POST['date'] = date("Y-m-d H:i:s");
                     $_POST['user_id'] = $user_id;
                     $_POST['price_id'] = 1;
@@ -114,17 +114,17 @@ class Admin extends Controller
 
                     message("Course successfully created.");
 
-                    if($row) {
+                    if ($row) {
                         message("Course successfully created.");
                         redirect('admin/courses/edit/' . $row->id);
-                    }else{
+                    } else {
                         redirect('admin/courses');
                     }
                 }
 
                 $data['errors'] = $course->errors;
             }
-        }else if($action == 'edit') {
+        } else if ($action == 'edit') {
             //view single course
             $categories = $category->findAll("ASC");
             $languages = $language->findAll("ASC");
@@ -134,20 +134,33 @@ class Admin extends Controller
 
             $data['row'] = $row = $course->first(['user_id' => $user_id, 'id' => $id]);
 
-            if($_SERVER['REQUEST_METHOD'] == "POST" && $row) {
-                if(!empty($_POST['data_type']) && $_POST['data_type'] == "read") {
-                    if($_POST['tab_name'] == "course-landing-page") {
+            if ($_SERVER['REQUEST_METHOD'] == "POST" && $row) {
+                if (!empty($_POST['data_type']) && $_POST['data_type'] == "read") {
+                    if ($_POST['tab_name'] == "course-landing-page") {
                         include views_path("course-edit-tabs/course-landing-page");
                     }
+                } else if (!empty($_POST['data_type']) && $_POST['data_type'] == "save") {
+                    if ($_POST['tab_name'] == "course-landing-page") {
+                        if($course->edit_validate($_POST)) {
+                            $course->update($id, $_POST);
 
-                    //echo "<input />";
+                            $info['data'] = "Course saved successfully.";
+                            $info['data_type'] = "save";
+                        }else{
+                            $info['errors'] = $course->errors;
+                                
+                            $info['data'] = "Please fix errors.";
+                            $info['data_type'] = "save";
+                        }
+
+                        echo json_encode($info);
+                    }
                 }
                 die;
             }
-        }else{
+        } else {
             //view courses
             $data['rows'] = $course->where(['user_id' => $user_id]);
-
         }
 
         $this->view('admin/courses', $data);
