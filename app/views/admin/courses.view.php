@@ -278,6 +278,7 @@
                         }
                     }else{
                         disable_save_button(false);
+                        dirty = false;
                     }
                 }
             }

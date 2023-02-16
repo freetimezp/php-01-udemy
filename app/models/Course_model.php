@@ -64,25 +64,56 @@ class Course_model extends Model
         return false;
     }
 
-    public function edit_validate($data, $id = null)
+    public function edit_validate($data, $id = null, $tab_name = null)
     {
         $this->errors = [];
         
-        if(empty($data['title'])) {
-            $this->errors['title'] = "Course title is required.";
-        }else if(!preg_match("/^[a-zA-Z \-\_\&]+$/", trim($data['title']))) {
-            $this->errors['title'] = "Use letters, spaces and [-_&] in title.";
+        if($tab_name == "course-landing-page") {
+            if(empty($data['title'])) {
+                $this->errors['title'] = "Course title is required.";
+            }else if(!preg_match("/^[a-zA-Z \-\_\&]+$/", trim($data['title']))) {
+                $this->errors['title'] = "Use letters, spaces and [-_&] in title.";
+            }
+    
+            if(empty($data['primary_subject'])) {
+                $this->errors['primary_subject'] = "Course primary subject is required.";
+            }else if(!preg_match("/^[a-zA-Z \-\_\&]+$/", trim($data['primary_subject']))) {
+                $this->errors['primary_subject'] = "Use letters, spaces and [-_&] in primary subject.";
+            }
+    
+            if(empty($data['category_id'])) {
+                $this->errors['category_id'] = "Choose Category..";
+            }
+
+            if(empty($data['level_id'])) {
+                $this->errors['level_id'] = "Choose Level..";
+            } 
+    
+            if(empty($data['currency_id'])) {
+                $this->errors['currency_id'] = "Choose Currency..";
+            } 
+
+            if(empty($data['language_id'])) {
+                $this->errors['language_id'] = "Choose Language..";
+            } 
+    
+            if(empty($data['price_id'])) {
+                $this->errors['price_id'] = "Choose Price..";
+            }
+
+            if(empty($data['subtitle'])) {
+                $this->errors['subtitle'] = "Choose Subtitle..";
+            }
+    
+            if(empty($data['description'])) {
+                $this->errors['description'] = "Choose Description..";
+            }
+        }else if($tab_name == "course-messages") {
+                  
         }
 
-        if(empty($data['primary_subject'])) {
-            $this->errors['primary_subject'] = "Course primary subject is required.";
-        }else if(!preg_match("/^[a-zA-Z \-\_\&]+$/", trim($data['primary_subject']))) {
-            $this->errors['primary_subject'] = "Use letters, spaces and [-_&] in primary subject.";
-        }
 
-        if(empty($data['category_id'])) {
-            $this->errors['category_id'] = "Choose Category..";
-        }          
+
 
         if(empty($this->errors)) {
             return true;

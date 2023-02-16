@@ -138,23 +138,23 @@ class Admin extends Controller
                 if (!empty($_POST['data_type']) && $_POST['data_type'] == "read") {
                     if ($_POST['tab_name'] == "course-landing-page") {
                         include views_path("course-edit-tabs/course-landing-page");
+                    } else if ($_POST['tab_name'] == "course-messages") {
+                        include views_path("course-edit-tabs/course-messages");
                     }
                 } else if (!empty($_POST['data_type']) && $_POST['data_type'] == "save") {
-                    if ($_POST['tab_name'] == "course-landing-page") {
-                        if($course->edit_validate($_POST)) {
-                            $course->update($id, $_POST);
+                    if ($course->edit_validate($_POST, $id, $_POST['tab_name'])) {
+                        $course->update($id, $_POST);
 
-                            $info['data'] = "Course saved successfully.";
-                            $info['data_type'] = "save";
-                        }else{
-                            $info['errors'] = $course->errors;
-                                
-                            $info['data'] = "Please fix errors.";
-                            $info['data_type'] = "save";
-                        }
+                        $info['data'] = "Course saved successfully.";
+                        $info['data_type'] = "save";
+                    } else {
+                        $info['errors'] = $course->errors;
 
-                        echo json_encode($info);
+                        $info['data'] = "Please fix errors.";
+                        $info['data_type'] = "save";
                     }
+
+                    echo json_encode($info);
                 }
                 die;
             }
