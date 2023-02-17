@@ -1,4 +1,5 @@
 <form>
+    <?php csrf(); ?>
     <div class="col-md-8 mx-auto">
         <div class="input-group my-3">
             <span class="input-group-text col-sm-2">Course Title</span>
@@ -96,7 +97,7 @@
 
         <div class="row my-4">
             <div class="col-sm-4">
-                <img src="<?= ROOT; ?>/assets/images/no_image.jpg" alt="image" style="width: 100%;">
+                <img class="js-image-upload-preview" src="<?=get_image($row->course_image);?>" alt="image" style="width: 100%; object-fit: cover;">
             </div>
             <div class="col-sm-8">
                 <div class="h5">Course Image</div>
@@ -112,7 +113,7 @@
 
         <div class="row my-4">
             <div class="col-sm-4">
-                <img src="<?= ROOT; ?>/assets/images/no_image.jpg" alt="image" style="width: 100%;">
+                <img src="<?=get_image('');?>" alt="image" style="width: 100%;">
             </div>
             <div class="col-sm-8">
                 <div class="h5">Course Video</div>

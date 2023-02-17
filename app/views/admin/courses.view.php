@@ -349,6 +349,20 @@
             return;
         }
 
+        var allowed_types = ['jpg', 'jpeg', 'png'];
+        var ext = file.name.split(".").pop(); //pop get the last item of array
+        ext = ext.toLowerCase();
+
+        if(!allowed_types.includes(ext)) {
+            alert("Only this types allowed: " + allowed_types.toString(","));
+            return;
+        }
+
+        //image preview
+        var img = document.querySelector(".js-image-upload-preview");
+        var link = URL.createObjectURL(file);
+        img.src = link;
+
         course_image_uploading = true;
 
         document.querySelector(".js-image-upload-info").classList.remove("hide");

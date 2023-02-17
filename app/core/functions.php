@@ -145,6 +145,19 @@ function views_path($path) {
     return "../app/views/" .  $path . ".view.php";
 }
 
+function get_image($file) {
+    if(file_exists($file)) {
+        return ROOT . "/" . $file;
+    }
+
+    return ROOT . "/assets/images/no_image.jpg";
+}
+
+function csrf() {
+    $code = md5(time());
+    $_SESSION['csrf_code'] = $code;
+    echo "<input name='csrf_code' type='hidden' value='$code' />";
+}
 
 
 

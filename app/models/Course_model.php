@@ -15,6 +15,7 @@ class Course_model extends Model
         'price_id',
         'promo_link',
         'course_image',
+        'course_image_tmp',
         'course_promo_video',
         'primary_subject',
         'date',
@@ -25,6 +26,7 @@ class Course_model extends Model
         'published',
         'subtitle',
         'currency_id',
+        'csrf_code',
     ];
 
     protected $afterSelect = [
