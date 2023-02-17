@@ -338,6 +338,69 @@
 
         send_data(obj);
     }
+
+    //upload image
+    var course_image_uploading = false;
+    var ajax_course_image = null;
+
+    function upload_course_image(file) {
+        if(course_image_uploading) {
+            alert("please wait while other image uploads..");
+            return;
+        }
+
+        course_image_uploading = true;
+
+        document.querySelector(".js-image-upload-info").classList.remove("hide");
+        document.querySelector(".js-image-upload-info").innerHTML = "Image UPLOAD success";
+        document.querySelector(".js-image-upload-input").classList.add("hide");
+        document.querySelector(".js-image-upload-cancel-button").classList.remove("hide");
+
+        var myForm = new FormData();
+        ajax_course_image = new XMLHttpRequest();
+
+        ajax_course_image.addEventListener("readystatechange", function() {
+            if (ajax_course_image.readyState == 4) {
+                if (ajax_course_image.status == 200) {
+                    //everything well
+                    console.log(ajax_course_image.responseText);
+                }
+
+                course_image_uploading = false;
+                setTimeout(() => {
+                    document.querySelector(".js-image-upload-info").classList.add("hide");
+                    document.querySelector(".js-image-upload-info").innerHTML = "";
+                }, 1000);
+                document.querySelector(".js-image-upload-input").classList.remove("hide");
+                document.querySelector(".js-image-upload-cancel-button").classList.add("hide");
+            }
+        });
+
+        ajax_course_image.addEventListener('error', function() {
+            alert("error occured");
+        });
+
+        ajax_course_image.addEventListener('abort', function() {
+            alert("upload aborted");
+        });
+
+        ajax_course_image.upload.addEventListener('progress', function(e) {
+            var percent = Math.round((e.loaded / e.total) * 100);
+            document.querySelector(".progress-bar-image").style.width = percent + "%";
+            document.querySelector(".progress-bar-image").innerHTML = percent + "%";
+        });
+
+        myForm.append('data_type','upload_course_image');
+        myForm.append('tab_name',tab);
+        myForm.append('image',file);
+
+        ajax_course_image.open('post', '', true);
+        ajax_course_image.send(myForm);
+    }
+
+    function ajax_course_image_cancel() {
+        ajax_course_image.abort();
+    }
 </script>
 
 <?php $this->view("admin/admin-footer", $data); ?>

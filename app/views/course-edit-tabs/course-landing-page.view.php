@@ -101,10 +101,12 @@
             <div class="col-sm-8">
                 <div class="h5">Course Image</div>
                 Upload your Course Image here. Image must be jpg, jpeg, png or gif formats.<br><br>
-                <input type="file">
+                <input onchange="upload_course_image(this.files[0])" type="file" name="" class="js-image-upload-input">
                 <div class="progress my-4">
-                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                    <div class="progress-bar progress-bar-image" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                 </div>
+                <div class="js-image-upload-info hide"></div>
+                <button type="button" onclick="ajax_course_image_cancel()" class="js-image-upload-cancel-button btn btn-warning btn-sm text-white hide">Cancel Upload</button>
             </div>
         </div>
 
@@ -115,10 +117,12 @@
             <div class="col-sm-8">
                 <div class="h5">Course Video</div>
                 Upload your Course Video here.<br><br>
-                <input type="file">
+                <input type="file" name="" class="js-video-upload-input"> 
                 <div class="progress my-4">
-                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                    <div class="progress-bar progress-bar-video" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                 </div>
+                <div class="js-video-upload-info hide"></div>
+                <button type="button" class="js-video-upload-cancel-button btn btn-warning btn-sm text-white hide">Cancel Upload</button>
             </div>
         </div>
     </div>
