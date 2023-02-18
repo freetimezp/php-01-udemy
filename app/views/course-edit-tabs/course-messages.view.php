@@ -1,4 +1,6 @@
 <form>
+    <?php csrf(); ?>
+
     <div class="col-md-8 mx-auto mt-5">
         <div class="row mb-3">
             <label class="col-sm-2 ps-4">Welcome message</label>

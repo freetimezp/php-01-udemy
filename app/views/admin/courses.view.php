@@ -407,6 +407,7 @@
         myForm.append('data_type','upload_course_image');
         myForm.append('tab_name',tab);
         myForm.append('image',file);
+        myForm.append('csrf_code', document.querySelector(".js-csrf_code").value);
 
         ajax_course_image.open('post', '', true);
         ajax_course_image.send(myForm);
@@ -414,6 +415,85 @@
 
     function ajax_course_image_cancel() {
         ajax_course_image.abort();
+    }
+
+
+    //upload video
+    var course_video_uploading = false;
+    var ajax_course_video = null;
+
+    function upload_course_video(file) {
+        if(course_video_uploading) {
+            alert("please wait while other video uploads..");
+            return;
+        }
+
+        var allowed_types = ['mp4'];
+        var ext = file.name.split(".").pop(); //pop get the last item of array
+        ext = ext.toLowerCase();
+
+        if(!allowed_types.includes(ext)) {
+            alert("Only this types allowed: " + allowed_types.toString(","));
+            return;
+        }
+
+        //video preview
+        var vdo = document.querySelector(".js-video-upload-preview");
+        var link = URL.createObjectURL(file);
+        vdo.src = link;
+
+        course_video_uploading = true;
+
+        document.querySelector(".js-video-upload-info").classList.remove("hide");
+        document.querySelector(".js-video-upload-info").innerHTML = "video UPLOAD success";
+        document.querySelector(".js-video-upload-input").classList.add("hide");
+        document.querySelector(".js-video-upload-cancel-button").classList.remove("hide");
+
+        var myForm = new FormData();
+        ajax_course_video = new XMLHttpRequest();
+
+        ajax_course_video.addEventListener("readystatechange", function() {
+            if (ajax_course_video.readyState == 4) {
+                if (ajax_course_video.status == 200) {
+                    //everything well
+                    console.log(ajax_course_video.responseText);
+                }
+
+                course_video_uploading = false;
+                setTimeout(() => {
+                    document.querySelector(".js-video-upload-info").classList.add("hide");
+                    document.querySelector(".js-video-upload-info").innerHTML = "";
+                }, 1000);
+                document.querySelector(".js-video-upload-input").classList.remove("hide");
+                document.querySelector(".js-video-upload-cancel-button").classList.add("hide");
+            }
+        });
+
+        ajax_course_video.addEventListener('error', function() {
+            alert("error occured");
+        });
+
+        ajax_course_video.addEventListener('abort', function() {
+            alert("upload aborted");
+        });
+
+        ajax_course_video.upload.addEventListener('progress', function(e) {
+            var percent = Math.round((e.loaded / e.total) * 100);
+            document.querySelector(".progress-bar-video").style.width = percent + "%";
+            document.querySelector(".progress-bar-video").innerHTML = percent + "%";
+        });
+
+        myForm.append('data_type','upload_course_video');
+        myForm.append('tab_name',tab);
+        myForm.append('video',file);
+        myForm.append('csrf_code', document.querySelector(".js-csrf_code").value);
+
+        ajax_course_video.open('post', '', true);
+        ajax_course_video.send(myForm);
+    }
+
+    function ajax_course_video_cancel() {
+        ajax_course_video.abort();
     }
 </script>
 

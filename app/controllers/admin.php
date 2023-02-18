@@ -147,7 +147,8 @@ class Admin extends Controller
                         if($_SESSION['csrf_code'] == $_POST['csrf_code']) {
                             if ($course->edit_validate($_POST, $id, $_POST['tab_name'])) {
                                 //if temp image is exists 
-                                if($row->course_image_tmp != "" && file_exists($row->course_image_tmp)) {
+                                if($row->course_image_tmp != "" && file_exists($row->course_image_tmp) 
+                                    && $row->csrf_code == $_POST['csrf_code']) {
                                     //delete current image
                                     if(file_exists($row->course_image)) {
                                         unlink($row->course_image);
@@ -189,11 +190,11 @@ class Admin extends Controller
     
                             //delete old temp file
                             if(file_exists($row->course_image_tmp)) {
-                                show(123);
+                                //show(123);
                                 unlink($row->course_image_tmp);
                             }
     
-                            $course->update($id, ['course_image_tmp' => $destination]);
+                            $course->update($id, ['course_image_tmp' => $destination, 'csrf_code' => $_POST['csrf_code']]);
                         }
                         //show($_FILES);
                         //show($_POST);

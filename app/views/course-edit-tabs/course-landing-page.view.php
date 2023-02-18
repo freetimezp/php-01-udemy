@@ -97,7 +97,7 @@
 
         <div class="row my-4">
             <div class="col-sm-4">
-                <img class="js-image-upload-preview" src="<?=get_image($row->course_image);?>" alt="image" style="width: 100%; object-fit: cover;">
+                <img class="js-image-upload-preview" src="<?= get_image($row->course_image); ?>" alt="image" style="width: 100%; object-fit: cover;">
             </div>
             <div class="col-sm-8">
                 <div class="h5">Course Image</div>
@@ -113,17 +113,21 @@
 
         <div class="row my-4">
             <div class="col-sm-4">
-                <img src="<?=get_image('');?>" alt="image" style="width: 100%;">
+                <video class="js-video-upload-preview" controls style="width: 100%;">
+                    <source src="$row->course_promo_video?>" type="video/mp4" style="width: 100%;">
+                </video>
             </div>
             <div class="col-sm-8">
                 <div class="h5">Course Video</div>
                 Upload your Course Video here.<br><br>
-                <input type="file" name="" class="js-video-upload-input"> 
+                <input onchange="upload_course_video(this.files[0])" type="file" name="" class="js-video-upload-input">
                 <div class="progress my-4">
                     <div class="progress-bar progress-bar-video" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                 </div>
                 <div class="js-video-upload-info hide"></div>
-                <button type="button" class="js-video-upload-cancel-button btn btn-warning btn-sm text-white hide">Cancel Upload</button>
+                <button type="button" onclick="ajax_course_video_cancel()" class="js-video-upload-cancel-button btn btn-warning btn-sm text-white hide">
+                    Cancel Upload
+                </button>
             </div>
         </div>
     </div>

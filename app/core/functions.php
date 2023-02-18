@@ -156,7 +156,7 @@ function get_image($file) {
 function csrf() {
     $code = md5(time());
     $_SESSION['csrf_code'] = $code;
-    echo "<input name='csrf_code' type='hidden' value='$code' />";
+    echo "<input class='js-csrf_code' name='csrf_code' type='hidden' value='$code' />";
 }
 
 
