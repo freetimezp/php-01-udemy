@@ -7,7 +7,7 @@ function show($stuff) {
 }
 
 function get_date($date) {
-    return date("jS M, Y H:i:s", strtotime($date));
+    return date("jS M, Y", strtotime($date));
 }
 
 function set_value($key, $default = '') {
