@@ -164,6 +164,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Title</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Instructor</th>
                         <th scope="col">Category</th>
                         <th scope="col">Price</th>
@@ -179,6 +180,9 @@
                             <tr>
                                 <th scope="row"><?= $row->id; ?></th>
                                 <td><?= esc($row->title); ?></td>
+                                <td>
+                                    <img src="<?= get_image($row->course_image); ?>" alt="" style="max-width: 60px;">
+                                </td>
                                 <td><?= esc($row->user_row->name ?? 'Unknown'); ?></td>
                                 <td><?= esc($row->category_row->category ?? 'Unknown'); ?></td>
                                 <td><?= esc($row->price_row->name ?? 'Unknown'); ?></td>

@@ -64,6 +64,11 @@
 <?php if (!empty($rows)) : ?>
   <section id="posts" class="posts">
     <div class="container" data-aos="fade-up">
+      <div class="section-header d-flex justify-content-between align-items-center mb-5">
+        <h2>Courses</h2>
+        <div><a href="category.html" class="more">See All Courses</a></div>
+      </div>
+
       <div class="row g-5">
         <div class="col-lg-4">
           <div class="post-entry-1 lg">
@@ -103,41 +108,23 @@
               <div class="trending">
                 <h3>Trending</h3>
                 <ul class="trending-post">
-                  <li>
-                    <a href="single-post.html">
-                      <span class="number">1</span>
-                      <h3>The Best Homemade Masks for Face (keep the Pimples Away)</h3>
-                      <span class="author">Jane Cooper</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="single-post.html">
-                      <span class="number">2</span>
-                      <h3>17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</h3>
-                      <span class="author">Wade Warren</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="single-post.html">
-                      <span class="number">3</span>
-                      <h3>13 Amazing Poems from Shel Silverstein with Valuable Life Lessons</h3>
-                      <span class="author">Esther Howard</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="single-post.html">
-                      <span class="number">4</span>
-                      <h3>9 Half-up/half-down Hairstyles for Long and Medium Hair</h3>
-                      <span class="author">Cameron Williamson</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="single-post.html">
-                      <span class="number">5</span>
-                      <h3>Life Insurance And Pregnancy: A Working Mom’s Guide</h3>
-                      <span class="author">Jenny Wilson</span>
-                    </a>
-                  </li>
+                  <?php if (!empty($trending)) : ?>
+                    <?php $num = 0; ?>
+                    <?php $user = new User(); ?>
+                    <?php foreach ($trending as $row) : ?>
+                      <?php $num++; ?>
+                      <li>
+                        <a href="single-post.html">
+                          <span class="number"><?=$num;?></span>
+                          <h3><?=esc($row->title)?></h3>
+                          <span class="author">
+                            <?php $author = $user->first(['id' => $row->user_id]); ?>
+                            <?= $author->firstname . ' ' . $author->lastname; ?>
+                          </span>
+                        </a>
+                      </li>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
                 </ul>
               </div>
 

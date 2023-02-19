@@ -27,6 +27,8 @@ class Course_model extends Model
         'subtitle',
         'currency_id',
         'csrf_code',
+        'views',
+        'trending',
     ];
 
     protected $afterSelect = [
