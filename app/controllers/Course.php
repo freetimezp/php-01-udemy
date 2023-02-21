@@ -2,13 +2,12 @@
 
 namespace Controller;
 
-use \Model\Course;
 
-class Home extends Controller
+class Course extends Controller
 {
     public function index()
     {
-        $course = new Course();
+        $course = new \Model\Course();
 
         $data['title'] = "Home";
 

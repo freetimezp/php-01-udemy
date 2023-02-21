@@ -1,5 +1,16 @@
 <?php
 
+namespace Controller;
+
+use \Model\Auth;
+use \Model\User;
+use \Model\Course;
+use \Model\Category_model;
+use \Model\Language_model;
+use \Model\Level_model;
+use \Model\Price_model;
+use \Model\Currency_model;
+
 class Admin extends Controller
 {
     public function index()
@@ -92,7 +103,7 @@ class Admin extends Controller
         $data['action'] = $action;
         $data['id'] = $id;
 
-        $course = new Course_model();
+        $course = new Course();
         $category = new Category_model();
         $language = new Language_model();
         $level = new Level_model();

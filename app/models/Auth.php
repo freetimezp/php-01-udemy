@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class Auth
 {
     public static function authenticate($row) {

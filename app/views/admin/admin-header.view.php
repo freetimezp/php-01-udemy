@@ -1,3 +1,6 @@
+<?php 
+  use \Model\Auth;
+?>
 <!DOCTYPE html>
 <html lang="en">
 

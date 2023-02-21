@@ -1,6 +1,8 @@
 <?php
 
-class Course_model extends Model
+namespace Model;
+
+class Course extends Model
 {
     public $errors = [];
     protected $table = 'courses';
@@ -132,7 +134,7 @@ class Course_model extends Model
     }
 
     protected function get_sub_category($rows) {
-        $db = new Database();
+        $db = new \Database();
         
         if(!empty($rows[0]->category_id)) {
             foreach($rows as $key => $row) {
@@ -149,7 +151,7 @@ class Course_model extends Model
     }
 
     protected function get_user($rows) {
-        $db = new Database();
+        $db = new \Database();
         
         if(!empty($rows[0]->user_id)) {
             foreach($rows as $key => $row) {
@@ -167,7 +169,7 @@ class Course_model extends Model
     }
 
     protected function get_price($rows) {
-        $db = new Database();
+        $db = new \Database();
         
         if(!empty($rows[0]->price_id)) {
             foreach($rows as $key => $row) {

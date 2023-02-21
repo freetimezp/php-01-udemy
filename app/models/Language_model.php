@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class Language_model extends Model
 {
     public $errors = [];

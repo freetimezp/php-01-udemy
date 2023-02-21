@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class Level_model extends Model
 {
     public $errors = [];

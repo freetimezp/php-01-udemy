@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class Currency_model extends Model
 {
     public $errors = [];

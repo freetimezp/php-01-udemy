@@ -24,7 +24,7 @@ Class App {
         }
 
         //create new class of controller (by default Home)
-        $mycontroller = new $this->controller();
+        $mycontroller = new ("Controller\\" . $this->controller)();
 
         //check method
         if(isset($arr[1])) {

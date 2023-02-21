@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class Price_model extends Model
 {
     public $errors = [];

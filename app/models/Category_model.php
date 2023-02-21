@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class Category_model extends Model
 {
     public $errors = [];

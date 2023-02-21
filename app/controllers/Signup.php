@@ -1,5 +1,9 @@
 <?php
 
+namespace Controller;
+
+use \Model\User;
+
 class Signup extends Controller
 {
     public function index()

@@ -1,5 +1,9 @@
 <?php
 
+namespace Controller;
+
+use \Model\Auth;
+
 class Logout extends Controller
 {
     public function index()

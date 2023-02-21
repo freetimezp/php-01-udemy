@@ -1,3 +1,6 @@
+<?php  
+  use \Model\User;
+?>
 <?php $this->view("includes/header", $data); ?>
 
 <!-- ======= Header as nav ======= -->
