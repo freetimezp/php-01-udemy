@@ -301,6 +301,13 @@
       </li><!-- End Enrolled Courses Nav -->
 
       <li class="nav-item">
+        <a class="nav-link " href="<?=ROOT;?>/admin/slider_images">
+          <i class="bi bi-images"></i>
+          <span>Slider Images</span>
+        </a>
+      </li><!-- End Slider Images Nav -->
+
+      <li class="nav-item">
         <a class="nav-link " href="<?=ROOT;?>/admin/history">
           <i class="bi bi-clock-history"></i>
           <span>Watch History</span>
