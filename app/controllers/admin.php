@@ -4,6 +4,7 @@ namespace Controller;
 
 use \Model\Auth;
 use \Model\User;
+use \Model\Slider;
 use \Model\Course;
 use \Model\Category_model;
 use \Model\Language_model;
@@ -97,11 +98,13 @@ class Admin extends Controller
             redirect('login');
         }
 
-        $id = $id ?? Auth::getId();
-        $user = new User();
-        $data['row'] = $row = $user->first(['id' => $id]);
+        $slider = new Slider();
+        $data['rows'] = $rows = $slider->where(['disabled' => 0]);
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST" && $row) {
+        $id = $_POST['id'] ?? 0;
+        $row = $slider->first(['id' => $id]);
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $folder = "uploads/images/";
             if (!file_exists($folder)) {
                 mkdir($folder, 0777, true);
@@ -109,41 +112,47 @@ class Admin extends Controller
                 file_put_contents("uploads/index.php", "<?php //no access");
             }
 
-            if ($user->edit_validate($_POST, $id)) {
-                $allowed = ['image/jpeg', 'image/png'];
+            $allowed = ['image/jpeg', 'image/png'];
 
-                if (!empty($_FILES['image']['name'])) {
-                    if ($_FILES['image']['error'] == 0) {
-                        if (in_array($_FILES['image']['type'], $allowed)) {
-                            //if is all good
-                            $destination = $folder . time() . $_FILES['image']['name'];
-                            move_uploaded_file($_FILES['image']['tmp_name'], $destination);
-                            //resize image for smaller size
-                            resize_image($destination);
-
-                            $_POST['image'] = $destination;
-
-                            if (file_exists($row->image)) {
-                                unlink($row->image);
-                            }
-                        } else {
-                            $user->errors['image'] = "An error occured with type image";
-                        }
+            if (!empty($_FILES['image']['name'])) {
+                if ($_FILES['image']['error'] == 0) {
+                    if (in_array($_FILES['image']['type'], $allowed)) {
+                        //if is all good
+                        $destination = $folder . time() . $_FILES['image']['name'];
+                        $_POST['image'] = $destination;
                     } else {
-                        $user->errors['image'] = "An error occured with upload image";
+                        $slider->errors['image'] = "An error occured with type image";
+                    }
+                } else {
+                    $slider->errors['image'] = "An error occured with upload image";
+                }
+            }
+
+            if ($slider->validate($_POST, $id)) {
+                if (!empty($destination)) {
+                    move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+                    //resize image for smaller size
+                    resize_image($destination);
+                    if ($row && file_exists($row->image)) {
+                        unlink($row->image);
                     }
                 }
 
-                $user->update($id, $_POST);
-                //message("Profile saved successfully!");
-                //redirect('admin/profile/' . $id);
+                if ($row) {
+                    unset($_POST['id']);
+                    $slider->update($id, $_POST);
+                } else {
+                    $slider->insert($_POST);
+                }
+
+                //message("Slider image saved successfully!");
             }
 
-            if (empty($user->errors)) {
-                $arr['message'] = "Profile saved successfully!";
+            if (empty($slider->errors)) {
+                $arr['message'] = "Slider image saved successfully!";
             } else {
                 $arr['message'] = "Please try to fix errors..";
-                $arr['errors'] = $user->errors;
+                $arr['errors'] = $slider->errors;
             }
 
             echo json_encode($arr);
@@ -151,7 +160,7 @@ class Admin extends Controller
         }
 
         $data['title'] = "Slider Images";
-        $data['errors'] = $user->errors;
+        $data['errors'] = $slider->errors;
 
         $this->view('admin/slider_images', $data);
     }
@@ -201,7 +210,7 @@ class Admin extends Controller
 
                 $data['errors'] = $course->errors;
             }
-        } else if ($action == 'edit') {          
+        } else if ($action == 'edit') {
             //view single course
             $categories = $category->findAll("ASC");
             $languages = $language->findAll("ASC");
@@ -214,68 +223,69 @@ class Admin extends Controller
             if ($_SERVER['REQUEST_METHOD'] == "POST" && $row) {
                 //check if form is valid by csrf code
 
-                    if (!empty($_POST['data_type']) && $_POST['data_type'] == "read") {
-                        if ($_POST['tab_name'] == "course-landing-page") {
-                            include views_path("course-edit-tabs/course-landing-page");
-                        } else if ($_POST['tab_name'] == "course-messages") {
-                            include views_path("course-edit-tabs/course-messages");
-                        }
-                    } else if (!empty($_POST['data_type']) && $_POST['data_type'] == "save") {
-                        if($_SESSION['csrf_code'] == $_POST['csrf_code']) {
-                            if ($course->edit_validate($_POST, $id, $_POST['tab_name'])) {
-                                //if temp image is exists 
-                                if($row->course_image_tmp != "" && file_exists($row->course_image_tmp) 
-                                    && $row->csrf_code == $_POST['csrf_code']) {
-                                    //delete current image
-                                    if(file_exists($row->course_image)) {
-                                        unlink($row->course_image);
-                                    }
-        
-                                    //add new image to array
-                                    $_POST['course_image'] = $row->course_image_tmp;
-                                    $_POST['course_image_tmp'] = "";
+                if (!empty($_POST['data_type']) && $_POST['data_type'] == "read") {
+                    if ($_POST['tab_name'] == "course-landing-page") {
+                        include views_path("course-edit-tabs/course-landing-page");
+                    } else if ($_POST['tab_name'] == "course-messages") {
+                        include views_path("course-edit-tabs/course-messages");
+                    }
+                } else if (!empty($_POST['data_type']) && $_POST['data_type'] == "save") {
+                    if ($_SESSION['csrf_code'] == $_POST['csrf_code']) {
+                        if ($course->edit_validate($_POST, $id, $_POST['tab_name'])) {
+                            //if temp image is exists 
+                            if (
+                                $row->course_image_tmp != "" && file_exists($row->course_image_tmp)
+                                && $row->csrf_code == $_POST['csrf_code']
+                            ) {
+                                //delete current image
+                                if (file_exists($row->course_image)) {
+                                    unlink($row->course_image);
                                 }
-        
-                                $course->update($id, $_POST);
-        
-                                $info['data'] = "Course saved successfully.";
-                                $info['data_type'] = "save";
-                            } else {
-                                $info['errors'] = $course->errors;
-        
-                                $info['data'] = "Please fix errors.";
-                                $info['data_type'] = "save";
+
+                                //add new image to array
+                                $_POST['course_image'] = $row->course_image_tmp;
+                                $_POST['course_image_tmp'] = "";
                             }
 
-                        }else{
-                            $info['errors'] = ['key' => 'value'];
-                            $info['data'] = "This form is not valid";
-                            $info['data_type'] = $_POST['data_type'];
-                        }   
-                        echo json_encode($info);
-                    }else if(!empty($_POST['data_type']) && $_POST['data_type'] == "upload_course_image") {
-                        $folder = "uploads/courses/";
-                        if(!file_exists($folder)) {
-                            mkdir($folder, 0777, true);
+                            $course->update($id, $_POST);
+
+                            $info['data'] = "Course saved successfully.";
+                            $info['data_type'] = "save";
+                        } else {
+                            $info['errors'] = $course->errors;
+
+                            $info['data'] = "Please fix errors.";
+                            $info['data_type'] = "save";
                         }
-                        
-                        $errors = [];
-                        if(!empty($_FILES['image']['name'])) {
-    
-                            $destination = $folder . $_FILES['image']['name'];
-                            move_uploaded_file($_FILES['image']['tmp_name'], $destination);
-    
-                            //delete old temp file
-                            if(file_exists($row->course_image_tmp)) {
-                                //show(123);
-                                unlink($row->course_image_tmp);
-                            }
-    
-                            $course->update($id, ['course_image_tmp' => $destination, 'csrf_code' => $_POST['csrf_code']]);
-                        }
-                        //show($_FILES);
-                        //show($_POST);
+                    } else {
+                        $info['errors'] = ['key' => 'value'];
+                        $info['data'] = "This form is not valid";
+                        $info['data_type'] = $_POST['data_type'];
                     }
+                    echo json_encode($info);
+                } else if (!empty($_POST['data_type']) && $_POST['data_type'] == "upload_course_image") {
+                    $folder = "uploads/courses/";
+                    if (!file_exists($folder)) {
+                        mkdir($folder, 0777, true);
+                    }
+
+                    $errors = [];
+                    if (!empty($_FILES['image']['name'])) {
+
+                        $destination = $folder . $_FILES['image']['name'];
+                        move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+
+                        //delete old temp file
+                        if (file_exists($row->course_image_tmp)) {
+                            //show(123);
+                            unlink($row->course_image_tmp);
+                        }
+
+                        $course->update($id, ['course_image_tmp' => $destination, 'csrf_code' => $_POST['csrf_code']]);
+                    }
+                    //show($_FILES);
+                    //show($_POST);
+                }
 
                 die;
             }
