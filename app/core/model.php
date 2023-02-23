@@ -65,7 +65,7 @@ class Model extends Database
         };
 
         $query = trim($query, "AND ");
-        $query .= " ORDER BY id $order limit $limit";
+        $query .= " ORDER BY id $order LIMIT $limit OFFSET $offset";
 
         $res = $this->query($query, $data);
         if(is_array($res)) {

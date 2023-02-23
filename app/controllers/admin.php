@@ -101,6 +101,13 @@ class Admin extends Controller
         $slider = new Slider();
         $data['rows'] = $rows = $slider->where(['disabled' => 0]);
 
+        if($rows) {
+            foreach($rows as $key => $obj) {
+                $num = $obj->id;
+                $data['rows'][$num] = $obj;
+            }
+        }
+
         $id = $_POST['id'] ?? 0;
         $row = $slider->first(['id' => $id]);
 

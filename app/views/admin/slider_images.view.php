@@ -49,25 +49,20 @@
           <div class="tab-content pt-2">
 
             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-              <h5 class="card-title">Slider 1</h5>
-            </div>
-
-            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
               <form method="POST" enctype="multipart/form-data">
                 <div class="row mb-3">
                   <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Slider Image</label>
                   <div class="col-md-8 col-lg-9">
 
                     <div class="d-flex flex-column">
-                      <img src="<?= get_image($rows[0]->image ?? ''); ?>" style="width:80%; min-width:80%; max-width:80%; height:400px; min-height:400px; max-height:400px;" alt="Profile" class="js-image-preview">
+                      <img src="<?= get_image($rows[1]->image ?? ''); ?>" style="width:80%; min-width:80%; max-width:80%; height:400px; min-height:400px; max-height:400px;" alt="Profile" class="js-image-preview">
                       <div class="js-filename m-2">Selected File: None</div>
                     </div>
 
                     <div class="pt-2">
                       <label class="btn btn-primary btn-sm" title="Upload new profile image">
                         <i class="bi bi-upload text-white"></i>
-                        <input onchange="load_image(this.files[0])" type="file" class="js-profile-image-input" name="image" style="display: none;">
+                        <input onchange="load_image(event, this.files[0])" type="file" class="js-profile-image-input" name="image" style="display: none;">
                       </label>
 
                       <?php if (!empty($errors['image'])) : ?>
@@ -81,7 +76,7 @@
                 <div class="row mb-3">
                   <label for="title" class="col-md-4 col-lg-3 col-form-label">Slider Title</label>
                   <div class="col-md-8 col-lg-9">
-                    <input name="title" type="text" class="form-control" id="title" required value="<?= set_value('title', $rows[0]->title ?? ''); ?>">
+                    <input name="title" type="text" class="form-control" id="title" required value="<?= set_value('title', $rows[1]->title ?? ''); ?>">
                   </div>
 
                   <?php if (!empty($errors['title'])) : ?>
@@ -93,7 +88,72 @@
                 <div class="row mb-3">
                   <label for="about" class="col-md-4 col-lg-3 col-form-label">Slider Description</label>
                   <div class="col-md-8 col-lg-9">
-                    <textarea name="description" class="form-control" id="description" style="height: 100px"><?= set_value('description', $rows[0]->description ?? ''); ?></textarea>
+                    <textarea name="description" class="form-control" id="description" style="height: 100px"><?= set_value('description', $rows[1]->description ?? ''); ?></textarea>
+                  </div>
+
+                  <?php if (!empty($errors['description'])) : ?>
+                    <small class="js-error-description text-danger"><?= $errors['description']; ?></small>
+                  <?php endif; ?>
+                  <small class="js-error-description text-danger"></small>
+                </div>
+
+                <div class="js-prog progress my-4 hide">
+                  <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                    Saving.. 50%
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <a href="<?= ROOT; ?>/admin">
+                    <button type="button" class="btn btn-secondary">Back</button>
+                  </a>
+                  <button type="button" onclick="save_image(event, 1)" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form><!-- End Form -->
+            </div>
+
+            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+              <form method="POST" enctype="multipart/form-data">
+                <div class="row mb-3">
+                  <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Slider Image</label>
+                  <div class="col-md-8 col-lg-9">
+
+                    <div class="d-flex flex-column">
+                      <img src="<?= get_image($rows[2]->image ?? ''); ?>" style="width:80%; min-width:80%; max-width:80%; height:400px; min-height:400px; max-height:400px;" alt="Profile" class="js-image-preview">
+                      <div class="js-filename m-2">Selected File: None</div>
+                    </div>
+
+                    <div class="pt-2">
+                      <label class="btn btn-primary btn-sm" title="Upload new profile image">
+                        <i class="bi bi-upload text-white"></i>
+                        <input onchange="load_image(event, this.files[0])" type="file" class="js-profile-image-input" name="image" style="display: none;">
+                      </label>
+
+                      <?php if (!empty($errors['image'])) : ?>
+                        <small class="js-error-image text-danger"><?= $errors['image']; ?></small>
+                      <?php endif; ?>
+                      <small class="js-error-image text-danger"></small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="title" class="col-md-4 col-lg-3 col-form-label">Slider Title</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="title" type="text" class="form-control" id="title" required value="<?= set_value('title', $rows[2]->title ?? ''); ?>">
+                  </div>
+
+                  <?php if (!empty($errors['title'])) : ?>
+                    <small class="js-error-title text-danger"><?= $errors['title']; ?></small>
+                  <?php endif; ?>
+                  <small class="js-error-title text-danger"></small>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="about" class="col-md-4 col-lg-3 col-form-label">Slider Description</label>
+                  <div class="col-md-8 col-lg-9">
+                    <textarea name="description" class="form-control" id="description" style="height: 100px"><?= set_value('description', $rows[2]->description ?? ''); ?></textarea>
                   </div>
 
                   <?php if (!empty($errors['description'])) : ?>
@@ -119,11 +179,131 @@
             </div>
 
             <div class="tab-pane fade pt-3" id="profile-settings">
-              3
+              <form method="POST" enctype="multipart/form-data">
+                <div class="row mb-3">
+                  <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Slider Image</label>
+                  <div class="col-md-8 col-lg-9">
+
+                    <div class="d-flex flex-column">
+                      <img src="<?= get_image($rows[3]->image ?? ''); ?>" style="width:80%; min-width:80%; max-width:80%; height:400px; min-height:400px; max-height:400px;" alt="Profile" class="js-image-preview">
+                      <div class="js-filename m-2">Selected File: None</div>
+                    </div>
+
+                    <div class="pt-2">
+                      <label class="btn btn-primary btn-sm" title="Upload new profile image">
+                        <i class="bi bi-upload text-white"></i>
+                        <input onchange="load_image(event, this.files[0])" type="file" class="js-profile-image-input" name="image" style="display: none;">
+                      </label>
+
+                      <?php if (!empty($errors['image'])) : ?>
+                        <small class="js-error-image text-danger"><?= $errors['image']; ?></small>
+                      <?php endif; ?>
+                      <small class="js-error-image text-danger"></small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="title" class="col-md-4 col-lg-3 col-form-label">Slider Title</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="title" type="text" class="form-control" id="title" required value="<?= set_value('title', $rows[3]->title ?? ''); ?>">
+                  </div>
+
+                  <?php if (!empty($errors['title'])) : ?>
+                    <small class="js-error-title text-danger"><?= $errors['title']; ?></small>
+                  <?php endif; ?>
+                  <small class="js-error-title text-danger"></small>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="about" class="col-md-4 col-lg-3 col-form-label">Slider Description</label>
+                  <div class="col-md-8 col-lg-9">
+                    <textarea name="description" class="form-control" id="description" style="height: 100px"><?= set_value('description', $rows[3]->description ?? ''); ?></textarea>
+                  </div>
+
+                  <?php if (!empty($errors['description'])) : ?>
+                    <small class="js-error-description text-danger"><?= $errors['description']; ?></small>
+                  <?php endif; ?>
+                  <small class="js-error-description text-danger"></small>
+                </div>
+
+                <div class="js-prog progress my-4 hide">
+                  <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                    Saving.. 50%
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <a href="<?= ROOT; ?>/admin">
+                    <button type="button" class="btn btn-secondary">Back</button>
+                  </a>
+                  <button type="button" onclick="save_image(event, 3)" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form><!-- End Form -->
             </div>
 
             <div class="tab-pane fade pt-3" id="profile-change-password">
-              4
+              <form method="POST" enctype="multipart/form-data">
+                <div class="row mb-3">
+                  <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Slider Image</label>
+                  <div class="col-md-8 col-lg-9">
+
+                    <div class="d-flex flex-column">
+                      <img src="<?= get_image($rows[4]->image ?? ''); ?>" style="width:80%; min-width:80%; max-width:80%; height:400px; min-height:400px; max-height:400px;" alt="Profile" class="js-image-preview">
+                      <div class="js-filename m-2">Selected File: None</div>
+                    </div>
+
+                    <div class="pt-2">
+                      <label class="btn btn-primary btn-sm" title="Upload new profile image">
+                        <i class="bi bi-upload text-white"></i>
+                        <input onchange="load_image(event, this.files[0])" type="file" class="js-profile-image-input" name="image" style="display: none;">
+                      </label>
+
+                      <?php if (!empty($errors['image'])) : ?>
+                        <small class="js-error-image text-danger"><?= $errors['image']; ?></small>
+                      <?php endif; ?>
+                      <small class="js-error-image text-danger"></small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="title" class="col-md-4 col-lg-3 col-form-label">Slider Title</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="title" type="text" class="form-control" id="title" required value="<?= set_value('title', $rows[4]->title ?? ''); ?>">
+                  </div>
+
+                  <?php if (!empty($errors['title'])) : ?>
+                    <small class="js-error-title text-danger"><?= $errors['title']; ?></small>
+                  <?php endif; ?>
+                  <small class="js-error-title text-danger"></small>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="about" class="col-md-4 col-lg-3 col-form-label">Slider Description</label>
+                  <div class="col-md-8 col-lg-9">
+                    <textarea name="description" class="form-control" id="description" style="height: 100px"><?= set_value('description', $rows[4]->description ?? ''); ?></textarea>
+                  </div>
+
+                  <?php if (!empty($errors['description'])) : ?>
+                    <small class="js-error-description text-danger"><?= $errors['description']; ?></small>
+                  <?php endif; ?>
+                  <small class="js-error-description text-danger"></small>
+                </div>
+
+                <div class="js-prog progress my-4 hide">
+                  <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                    Saving.. 50%
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <a href="<?= ROOT; ?>/admin">
+                    <button type="button" class="btn btn-secondary">Back</button>
+                  </a>
+                  <button type="button" onclick="save_image(event, 4)" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form><!-- End Form -->
             </div>
           </div><!-- End Bordered Tabs -->
         </div>
@@ -150,12 +330,13 @@
     sessionStorage.setItem("tab", tab_name);
   }
 
-  function load_image(file) {
-    document.querySelector(".js-filename").innerHTML = "Selected File: " + file.name;
+  function load_image(e, file) {
+    var form = e.currentTarget.form;
+    form.querySelector(".js-filename").innerHTML = "Selected File: " + file.name;
 
     let mylink = window.URL.createObjectURL(file);
 
-    document.querySelector(".js-image-preview").src = mylink;
+    form.querySelector(".js-image-preview").src = mylink;
   }
 
   window.onload = function() {
@@ -166,7 +347,7 @@
 
   //upload functions
   function save_image(e, id) {
-    if(uploading) {
+    if (uploading) {
       alert("Please wait another image is uploading");
       return;
     }
@@ -206,7 +387,7 @@
         alert("File type not allowed, try: " + allowed.toString(","));
         return;
       }
-    }else{
+    } else {
       alert("Image is required!");
       return;
     }

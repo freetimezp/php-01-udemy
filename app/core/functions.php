@@ -72,25 +72,19 @@ function str_to_url($url) {
 }
 
 function resize_image($filename, $max_size = 700) {
-    $ext = explode(".", $filename);
-    //get last item from array
-    $ext = strtolower(end($ext));
+    $type = mime_content_type($filename);
     
     if(file_exists($filename)) {
-        switch ($ext) {
-            case 'png':
+        switch ($type) {
+            case 'image/png':
                 $image = imagecreatefrompng($filename);
                 break;
             
-            case 'jpg':
-                $image = imagecreatefromjpeg($filename);
-                break;  
-            
-            case 'jpeg':
+            case 'image/jpeg':
                 $image = imagecreatefromjpeg($filename);
                 break;
 
-            case 'gif':
+            case 'image/gif':
                 $image = imagecreatefromgif($filename);
                 break;
             default:
@@ -102,33 +96,43 @@ function resize_image($filename, $max_size = 700) {
         $src_h = imagesy($image);
 
         if($src_w > $src_h) {
+            if($src_w < $max_size) {
+                $max_size = $src_w;
+            }
+
             $dst_w = $max_size;
             $dst_h = ($src_h / $src_w) * $max_size;
         }else{
+            if($src_h < $max_size) {
+                $max_size = $src_h;
+            }
+
             $dst_w = ($src_w / $src_h) * $max_size;
             $dst_h = $max_size;
         }
 
         $dst_image = imagecreatetruecolor($dst_w, $dst_h);
+        
+        if($type == "image/png") {
+            //transparent bg color for png images
+            imagealphablending($dst_image, false);
+            imagesavealpha($dst_image, true);
+        }
 
         imagecopyresampled($dst_image, $image, 0, 0, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
         imagedestroy($image);
 
         imagejpeg($dst_image, $filename, 90);
-        switch ($ext) {
-            case 'png':
+        switch ($type) {
+            case 'image/png':
                 imagepng($dst_image, $filename);
                 break;
             
-            case 'jpg':
-                imagejpeg($dst_image, $filename, 90);
-                break;  
-            
-            case 'jpeg':
+            case 'image/jpeg':
                 imagejpeg($dst_image, $filename, 90);
                 break;
 
-            case 'gif':
+            case 'image/gif':
                 imagegif($dst_image, $filename);
                 break;
             default:
