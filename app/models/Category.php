@@ -2,13 +2,14 @@
 
 namespace Model;
 
-class Category_model extends Model
+class Category extends Model
 {
     public $errors = [];
     protected $table = 'categories';
     protected $allowedColumns = [
         'category',
         'disabled',
+        'slug',
     ];
 
     public function validate($data)

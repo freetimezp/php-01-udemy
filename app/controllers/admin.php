@@ -6,7 +6,7 @@ use \Model\Auth;
 use \Model\User;
 use \Model\Slider;
 use \Model\Course;
-use \Model\Category_model;
+use \Model\Category;
 use \Model\Language_model;
 use \Model\Level_model;
 use \Model\Price_model;
@@ -186,7 +186,7 @@ class Admin extends Controller
         $data['id'] = $id;
 
         $course = new Course();
-        $category = new Category_model();
+        $category = new Category();
         $language = new Language_model();
         $level = new Level_model();
         $price = new Price_model();

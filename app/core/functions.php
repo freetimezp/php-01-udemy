@@ -1,54 +1,62 @@
 <?php
 
-function show($stuff) {
+use \Model\Category;
+
+function show($stuff)
+{
     echo "<pre>";
     print_r($stuff);
     echo "</pre>";
 }
 
-function get_date($date) {
+function get_date($date)
+{
     return date("jS M, Y", strtotime($date));
 }
 
-function set_value($key, $default = '') {
-    if(!empty($_POST[$key])) {
+function set_value($key, $default = '')
+{
+    if (!empty($_POST[$key])) {
         return $_POST[$key];
-    }else if(!empty($default)) {
+    } else if (!empty($default)) {
         return $default;
-    } 
-    
+    }
+
     return '';
 }
 
-function set_select($key, $value, $default = '') {
-    if(!empty($_POST[$key])) {
-        if($value == $_POST[$key]) {
+function set_select($key, $value, $default = '')
+{
+    if (!empty($_POST[$key])) {
+        if ($value == $_POST[$key]) {
             return ' selected ';
         }
-    }else if(!empty($default)) {
-        if($value == $default) {
+    } else if (!empty($default)) {
+        if ($value == $default) {
             return ' selected ';
         }
-    } 
-    
+    }
+
     return '';
 }
 
-function redirect($link) {
+function redirect($link)
+{
     header("Location: " . ROOT . "/" . $link);
     die;
 }
 
-function message($msg = '', $erase = false) {
-    if(!empty($msg)) {
+function message($msg = '', $erase = false)
+{
+    if (!empty($msg)) {
         $_SESSION['message'] = $msg;
-    }else{
-        if(!empty($_SESSION['message'])) {
+    } else {
+        if (!empty($_SESSION['message'])) {
             $msg = $_SESSION['message'];
-            if($erase) {
+            if ($erase) {
                 unset($_SESSION['message']);
             }
-            
+
             return $msg;
         }
     }
@@ -56,11 +64,13 @@ function message($msg = '', $erase = false) {
     return false;
 }
 
-function esc($str) {
+function esc($str)
+{
     return nl2br(htmlspecialchars($str));
 }
 
-function str_to_url($url) {
+function str_to_url($url)
+{
     $url = str_replace("'", "", $url);
     $url = preg_replace('~[^\\pL0-9_]+~u', '-', $url);
     $url = trim($url, "-");
@@ -71,15 +81,16 @@ function str_to_url($url) {
     return $url;
 }
 
-function resize_image($filename, $max_size = 700) {
+function resize_image($filename, $max_size = 700)
+{
     $type = mime_content_type($filename);
-    
-    if(file_exists($filename)) {
+
+    if (file_exists($filename)) {
         switch ($type) {
             case 'image/png':
                 $image = imagecreatefrompng($filename);
                 break;
-            
+
             case 'image/jpeg':
                 $image = imagecreatefromjpeg($filename);
                 break;
@@ -95,15 +106,15 @@ function resize_image($filename, $max_size = 700) {
         $src_w = imagesx($image);
         $src_h = imagesy($image);
 
-        if($src_w > $src_h) {
-            if($src_w < $max_size) {
+        if ($src_w > $src_h) {
+            if ($src_w < $max_size) {
                 $max_size = $src_w;
             }
 
             $dst_w = $max_size;
             $dst_h = ($src_h / $src_w) * $max_size;
-        }else{
-            if($src_h < $max_size) {
+        } else {
+            if ($src_h < $max_size) {
                 $max_size = $src_h;
             }
 
@@ -112,8 +123,8 @@ function resize_image($filename, $max_size = 700) {
         }
 
         $dst_image = imagecreatetruecolor($dst_w, $dst_h);
-        
-        if($type == "image/png") {
+
+        if ($type == "image/png") {
             //transparent bg color for png images
             imagealphablending($dst_image, false);
             imagesavealpha($dst_image, true);
@@ -127,7 +138,7 @@ function resize_image($filename, $max_size = 700) {
             case 'image/png':
                 imagepng($dst_image, $filename);
                 break;
-            
+
             case 'image/jpeg':
                 imagejpeg($dst_image, $filename, 90);
                 break;
@@ -136,8 +147,8 @@ function resize_image($filename, $max_size = 700) {
                 imagegif($dst_image, $filename);
                 break;
             default:
-            imagejpeg($dst_image, $filename, 90);
-            break;
+                imagejpeg($dst_image, $filename, 90);
+                break;
         }
         imagedestroy($dst_image);
     }
@@ -145,24 +156,34 @@ function resize_image($filename, $max_size = 700) {
     return $filename;
 }
 
-function views_path($path) {
+function views_path($path)
+{
     return "../app/views/" .  $path . ".view.php";
 }
 
-function get_image($file) {
-    if(file_exists($file)) {
+function get_image($file)
+{
+    if (file_exists($file)) {
         return ROOT . "/" . $file;
     }
 
     return ROOT . "/assets/images/no_image.jpg";
 }
 
-function csrf() {
+function csrf()
+{
     $code = md5(time());
     $_SESSION['csrf_code'] = $code;
     echo "<input class='js-csrf_code' name='csrf_code' type='hidden' value='$code' />";
 }
 
+function get_categories($id = null)
+{
+    $category = new Category();
 
-
-
+    if ($id) {
+        return $category->where(['disabled' => 0, 'id' => $id], 'ASC', 1);
+    } else {
+        return $category->where(['disabled' => 0], 'ASC', 20);
+    }
+}

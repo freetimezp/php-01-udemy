@@ -2,6 +2,7 @@
 
 namespace Controller;
 
+use \Model\Category;
 use \Model\Course;
 use \Model\Slider;
 
@@ -11,6 +12,7 @@ class Home extends Controller
     {
         $course = new Course();
         $slider = new Slider();
+        $category = new Category();
 
         $data['title'] = "Home";
 
