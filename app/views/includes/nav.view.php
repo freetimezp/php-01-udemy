@@ -4,9 +4,9 @@ use \Model\Auth;
 use \Model\Category;
 
 $categories = get_categories();
-$category = new Category();
 
 //set slug for category if not set
+//$category = new Category();
 // foreach($categories as $row) {
 //   $category->update($row->id, ['slug' => str_to_url($row->category)]);
 // }

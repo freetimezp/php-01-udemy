@@ -2,6 +2,8 @@
 
 class Database
 {
+    protected $afterSelect = [];
+
     public function connect()
     {
         try {
@@ -29,6 +31,13 @@ class Database
                 }
                 $result = $stm->fetchAll($type);
                 if (is_array($result) && count($result) > 0) {
+                    //run afterSelect func
+                    if (property_exists($this, 'afterSelect')) {
+                        foreach ($this->afterSelect as $func) {
+                            $result = $this->$func($result);
+                        }
+                    }
+
                     return $result;
                 }
             }
