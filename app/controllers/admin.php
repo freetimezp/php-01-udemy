@@ -217,6 +217,21 @@ class Admin extends Controller
 
                 $data['errors'] = $course->errors;
             }
+        } else if ($action == 'delete') {
+            $categories = $category->findAll("ASC");
+            $languages = $language->findAll("ASC");
+            $levels = $level->findAll("ASC");
+            $prices = $price->findAll("ASC");
+            $currencies = $currency->findAll("ASC");
+
+            $data['row'] = $row = $course->first(['user_id' => $user_id, 'id' => $id]);
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST" && $row) {
+                $course->delete($row->id);
+                message("Course was deleted!");
+
+                redirect("admin/courses");
+            }
         } else if ($action == 'edit') {
             //view single course
             $categories = $category->findAll("ASC");

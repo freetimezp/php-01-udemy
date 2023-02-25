@@ -93,6 +93,30 @@
         </div>
     </div>
 
+<?php elseif ($action == 'delete') : ?>
+    <div class="card">
+        <div class="card-body">
+
+            <?php if (!empty($row)) : ?>
+                <form method="POST">
+                    <h5 class="card-title d-flex align-items-center justify-content-center alert alert-danger">
+                        <div class="text-danger">Are you sure you want to delete Course </div>
+                        <div class="text-success mx-2">"<?= esc($row->title); ?>" ?</div>
+                    </h5>
+
+                    <div class="text-center my-5">
+                        <button class="btn btn-danger js-delete-button">Delete</button>
+
+                        <a href="<?= ROOT; ?>/admin/courses">
+                            <button class="btn btn-secondary">Back</button>
+                        </a>
+                    </div>
+                </form>
+            <?php else : ?>
+                <div>That course was not found!</div>
+            <?php endif; ?>
+        </div>
+    </div>
 <?php elseif ($action == 'edit') : ?>
 
     <div class="card">
@@ -262,11 +286,11 @@
     }
 
     function handle_result(result) {
-        if(result.substr(0,2) == '{"') {
+        if (result.substr(0, 2) == '{"') {
             var obj = JSON.parse(result);
 
-            if(typeof obj == "object") {
-                if(obj.data_type == "save") {
+            if (typeof obj == "object") {
+                if (obj.data_type == "save") {
                     alert(obj.data);
 
                     //clear all errors
@@ -276,17 +300,17 @@
                     }
 
                     //show errors
-                    if(typeof obj.errors == 'object') {
+                    if (typeof obj.errors == 'object') {
                         for (key in obj.errors) {
                             document.querySelector(".error-" + key).innerHTML = obj.errors[key];
                         }
-                    }else{
+                    } else {
                         disable_save_button(false);
                         dirty = false;
                     }
                 }
             }
-        }else{
+        } else {
             var contentDiv = document.querySelector("#tabs-content");
             contentDiv.innerHTML = result;
         }
@@ -348,7 +372,7 @@
     var ajax_course_image = null;
 
     function upload_course_image(file) {
-        if(course_image_uploading) {
+        if (course_image_uploading) {
             alert("please wait while other image uploads..");
             return;
         }
@@ -357,7 +381,7 @@
         var ext = file.name.split(".").pop(); //pop get the last item of array
         ext = ext.toLowerCase();
 
-        if(!allowed_types.includes(ext)) {
+        if (!allowed_types.includes(ext)) {
             alert("Only this types allowed: " + allowed_types.toString(","));
             return;
         }
@@ -408,9 +432,9 @@
             document.querySelector(".progress-bar-image").innerHTML = percent + "%";
         });
 
-        myForm.append('data_type','upload_course_image');
-        myForm.append('tab_name',tab);
-        myForm.append('image',file);
+        myForm.append('data_type', 'upload_course_image');
+        myForm.append('tab_name', tab);
+        myForm.append('image', file);
         myForm.append('csrf_code', document.querySelector(".js-csrf_code").value);
 
         ajax_course_image.open('post', '', true);
@@ -427,7 +451,7 @@
     var ajax_course_video = null;
 
     function upload_course_video(file) {
-        if(course_video_uploading) {
+        if (course_video_uploading) {
             alert("please wait while other video uploads..");
             return;
         }
@@ -436,7 +460,7 @@
         var ext = file.name.split(".").pop(); //pop get the last item of array
         ext = ext.toLowerCase();
 
-        if(!allowed_types.includes(ext)) {
+        if (!allowed_types.includes(ext)) {
             alert("Only this types allowed: " + allowed_types.toString(","));
             return;
         }
@@ -487,9 +511,9 @@
             document.querySelector(".progress-bar-video").innerHTML = percent + "%";
         });
 
-        myForm.append('data_type','upload_course_video');
-        myForm.append('tab_name',tab);
-        myForm.append('video',file);
+        myForm.append('data_type', 'upload_course_video');
+        myForm.append('tab_name', tab);
+        myForm.append('video', file);
         myForm.append('csrf_code', document.querySelector(".js-csrf_code").value);
 
         ajax_course_video.open('post', '', true);
